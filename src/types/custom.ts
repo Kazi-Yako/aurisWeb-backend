@@ -25,3 +25,23 @@ export interface authState {
 	error: string | null;
 	success: boolean;
 }
+
+export interface IPatient {
+	_id?: string;
+	firstName: string;
+	middleName?: string;
+	lastName: string;
+	gender?: string;
+	dob?: Date;
+	address1?: string;
+	address2?: string;
+	city?: string;
+	state?: string;
+	zipCode?: string;
+	country?: string;
+	email?: string;
+	personalPhone?: string;
+	workPhone?: string;
+	assuranceName?: string;
+	submit: string | undefined;
+}

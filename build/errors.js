@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserErrors = void 0;
+exports.PatientErrors = exports.UserErrors = void 0;
 var UserErrors;
 (function (UserErrors) {
     UserErrors["NO_USER_FOUND"] = "no-user-found";
@@ -8,4 +8,9 @@ var UserErrors;
     UserErrors["USERNAME_ALREADY_EXISTS"] = "username-already-exists";
     UserErrors["INVALID_EMAIL_OR_PASSWORD"] = "Invalid-email-or-password";
 })(UserErrors || (exports.UserErrors = UserErrors = {}));
+var PatientErrors;
+(function (PatientErrors) {
+    PatientErrors["NO_PATIENT_FOUND"] = "no-patient-found";
+    PatientErrors["PATIENT_ALREADY_EXISTS"] = "patient-already-exists";
+})(PatientErrors || (exports.PatientErrors = PatientErrors = {}));
 //# sourceMappingURL=errors.js.map

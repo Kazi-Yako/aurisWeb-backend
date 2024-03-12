@@ -1,10 +1,9 @@
 import User from '../models/userModel';
-import { generateToken, verifyToken } from '../utils/generateToken';
+import { generateToken } from '../utils/generateToken';
 import { UserErrors } from '../errors';
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { UserAttributes } from '../types/custom';
-import { NextFunction } from 'express';
 
 const registerUser = async (req: Request, res: Response) => {
 	const { firstName, lastName, email, password } = req.body;
