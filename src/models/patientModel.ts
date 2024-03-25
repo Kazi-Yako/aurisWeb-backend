@@ -69,19 +69,3 @@ const patientSchema = new Schema<IPatient>(
 const PatientModel = model<IPatient>('patients', patientSchema);
 
 export default PatientModel;
-
-// firstName,
-// middleName,
-// lastName,
-// gender,
-// dob,
-// address1,
-// address2,
-// city,
-// state,
-// zipCode,
-// country,
-// email,
-// personalPhone,
-// workPhone,
-// assuranceName,

@@ -26,7 +26,6 @@ const protect = (0, express_async_handler_1.default)((req, res, next) => __await
             token = authHeader.split(' ')[1];
             // verified token returns user id
             const decoded = jsonwebtoken_1.default.verify(token, exports.SECRET_KEY);
-            console.log('decoded', decoded);
             // find user's obj in db and assign to req.user
             req.userAttributes = yield userModel_1.default.findById(decoded.id).select('-password');
             next();

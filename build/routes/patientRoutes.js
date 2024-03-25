@@ -31,5 +31,15 @@ const authMiddleware_1 = require("../middleware/authMiddleware");
 const patientController = __importStar(require("../controllers/patientController"));
 const patientRouter = express_1.default.Router();
 patientRouter.route('/add').post(authMiddleware_1.protect, patientController.add);
+patientRouter.route('/get').get(authMiddleware_1.protect, patientController.getPatients);
+patientRouter
+    .route('/getpatient/:id')
+    .get(authMiddleware_1.protect, patientController.getPatient);
+patientRouter
+    .route('/update/:id')
+    .put(authMiddleware_1.protect, patientController.updatePatient);
+patientRouter
+    .route('/delete/:id')
+    .delete(authMiddleware_1.protect, patientController.deletePatient);
 exports.default = patientRouter;
 //# sourceMappingURL=patientRoutes.js.map

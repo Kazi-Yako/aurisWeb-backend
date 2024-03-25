@@ -28,8 +28,6 @@ const protect = asyncHandler(
 					SECRET_KEY
 				) as JwtTokenInterface;
 
-				console.log('decoded', decoded);
-
 				// find user's obj in db and assign to req.user
 				req.userAttributes = await UserModel.findById(
 					decoded.id

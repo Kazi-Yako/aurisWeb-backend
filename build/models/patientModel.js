@@ -64,19 +64,4 @@ const patientSchema = new mongoose_1.Schema({
 });
 const PatientModel = (0, mongoose_1.model)('patients', patientSchema);
 exports.default = PatientModel;
-// firstName,
-// middleName,
-// lastName,
-// gender,
-// dob,
-// address1,
-// address2,
-// city,
-// state,
-// zipCode,
-// country,
-// email,
-// personalPhone,
-// workPhone,
-// assuranceName,
 //# sourceMappingURL=patientModel.js.map

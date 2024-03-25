@@ -6,4 +6,18 @@ const patientRouter = express.Router();
 
 patientRouter.route('/add').post(protect, patientController.add);
 
+patientRouter.route('/get').get(protect, patientController.getPatients);
+
+patientRouter
+	.route('/getpatient/:id')
+	.get(protect, patientController.getPatient);
+
+patientRouter
+	.route('/update/:id')
+	.put(protect, patientController.updatePatient);
+
+patientRouter
+	.route('/delete/:id')
+	.delete(protect, patientController.deletePatient);
+
 export default patientRouter;
