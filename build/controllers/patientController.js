@@ -49,7 +49,7 @@ const add = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             assuranceName,
         });
         yield newPatient.save();
-        res.json({ message: 'Patient added successfully' });
+        res.status(200).json({ message: 'Patient added successfully' });
     }
     catch (err) {
         res.status(500).json({ type: err });

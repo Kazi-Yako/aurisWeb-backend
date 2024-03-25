@@ -12,6 +12,7 @@ node_modules/
 
 # production
 /frontend/build
+/build
 
 # misc
 .env
@@ -44,3 +45,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
