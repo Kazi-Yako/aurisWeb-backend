@@ -68,7 +68,7 @@ const getPatients = async (req: Request, res: Response) => {
 	try {
 		const patients: IPatient[] = await Patient.find({});
 
-		res.json(patients);
+		res.status(200).json(patients);
 	} catch (err) {
 		res.status(500).json({ type: err });
 	}
@@ -115,7 +115,7 @@ const updatePatient = async (req: Request, res: Response) => {
 			res.status(404).json({ message: PatientErrors.NO_PATIENT_FOUND });
 		}
 
-		res.json(patient);
+		res.status(200).json(patient);
 	} catch (err) {
 		res.status(500).json({ type: err });
 	}

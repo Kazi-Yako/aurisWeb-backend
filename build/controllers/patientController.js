@@ -59,7 +59,7 @@ exports.add = add;
 const getPatients = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const patients = yield patientModel_1.default.find({});
-        res.json(patients);
+        res.status(200).json(patients);
     }
     catch (err) {
         res.status(500).json({ type: err });
@@ -98,7 +98,7 @@ const updatePatient = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             console.log('Not Found');
             res.status(404).json({ message: errors_1.PatientErrors.NO_PATIENT_FOUND });
         }
-        res.json(patient);
+        res.status(200).json(patient);
     }
     catch (err) {
         res.status(500).json({ type: err });
