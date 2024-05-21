@@ -31,8 +31,8 @@ export interface IPatient {
 	firstName: string;
 	middleName?: string;
 	lastName: string;
-	gender?: string;
-	dob?: Date;
+	gender: string;
+	dob: string;
 	address1?: string;
 	address2?: string;
 	city?: string;

@@ -18,7 +18,7 @@ const patientSchema = new mongoose_1.Schema({
         required: true,
     },
     dob: {
-        type: Date,
+        type: String,
         required: true,
     },
     address1: {

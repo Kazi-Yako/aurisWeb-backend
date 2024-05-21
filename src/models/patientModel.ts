@@ -19,7 +19,7 @@ const patientSchema = new Schema<IPatient>(
 			required: true,
 		},
 		dob: {
-			type: Date,
+			type: String,
 			required: true,
 		},
 		address1: {
