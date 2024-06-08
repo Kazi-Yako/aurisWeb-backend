@@ -17,26 +17,32 @@ const errors_1 = require("../errors");
 const patientModel_1 = __importDefault(require("../models/patientModel"));
 const mongodb_1 = require("mongodb");
 const add = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { firstName, middleName, lastName, gender, dob, address1, address2, city, state, zipCode, country, email, personalPhone, workPhone, assuranceName, } = req.body;
     try {
+        let { firstName, middleName, lastName, gender, dob, address1, address2, city, state, zipCode, country, email, personalPhone, workPhone, assuranceName, } = req.body;
+        let firstNameLower = new String(firstName).toLowerCase();
+        let middleNameLower = middleName
+            ? new String(middleName).toLowerCase()
+            : '';
+        let lastNameLower = new String(lastName).toLowerCase();
+        let formattedDob = new Date(dob).toString();
         // check if the patient exists in db
         const patient = yield patientModel_1.default.findOne({
-            firstName,
-            lastName,
-            dob,
+            firstName: firstNameLower,
+            lastName: lastNameLower,
+            dob: formattedDob,
         });
         if (patient) {
             return res
                 .status(400)
-                .json({ type: errors_1.PatientErrors.PATIENT_ALREADY_EXISTS });
+                .json({ message: errors_1.PatientErrors.PATIENT_ALREADY_EXISTS });
         }
         // create new patient document in db
-        const newPatient = new patientModel_1.default({
-            firstName,
-            middleName,
-            lastName,
+        let newPatient = new patientModel_1.default({
+            firstName: firstNameLower,
+            middleName: middleNameLower,
+            lastName: lastNameLower,
+            dob: formattedDob,
             gender,
-            dob,
             address1,
             address2,
             city,

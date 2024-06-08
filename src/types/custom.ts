@@ -45,3 +45,14 @@ export interface IPatient {
 	assuranceName?: string;
 	submit: string | undefined;
 }
+
+export interface IDiagnosis {
+	_id?: string;
+	firstName?: string;
+	lastName?: string;
+	gender?: string;
+	dob?: string;
+	complaints: string;
+	additionalNotes?: string;
+	submit?: string;
+}

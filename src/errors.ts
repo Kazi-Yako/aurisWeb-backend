@@ -8,5 +8,10 @@ export enum UserErrors {
 export enum PatientErrors {
 	NO_PATIENT_FOUND = 'Patient not found',
 	PATIENT_ALREADY_EXISTS = 'Patient already exists',
-	PATIENT_ID_IS_REQUIRED = 'Patient ID is  required',
+	PATIENT_ID_IS_REQUIRED = 'Patient ID is required',
+}
+
+export enum DiagnosisErrors {
+	NO_DIAGNOSIS_FOUND = 'Diagnosis not found',
+	DIAGNOSIS_ID_IS_REQUIRED = 'Diagnosis ID is required',
 }
