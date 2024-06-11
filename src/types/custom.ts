@@ -56,3 +56,31 @@ export interface IDiagnosis {
 	additionalNotes?: string;
 	submit?: string;
 }
+
+export interface ITypeOfRdv {
+	_id?: string;
+	name?: string;
+	shortName?: string;
+	description?: string;
+}
+
+export interface IPhysician {
+	_id?: string;
+	firstName: string;
+	middleName?: string;
+	lastName: string;
+	gender: string;
+	specialty: string;
+	specialtyCode: string;
+	identificationNumber: string;
+	address1?: string;
+	address2?: string;
+	city?: string;
+	state?: string;
+	zipCode?: string;
+	country?: string;
+	email?: string;
+	personalPhone?: string;
+	workPhone?: string;
+	submit?: string;
+}

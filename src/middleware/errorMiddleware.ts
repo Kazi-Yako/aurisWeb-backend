@@ -19,7 +19,7 @@ const notFound = (
 
 const errorHandler = (req: Request, res: Response, next: NextFunction) => {
 	const error = new Error(`Not found: ${req.originalUrl}`);
-	res.status(404);
+	res.status(404).json({ message: error });
 	next(error);
 };
 
