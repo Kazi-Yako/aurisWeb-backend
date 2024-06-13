@@ -9,7 +9,7 @@ physicianRouter.route('/add').post(protect, physicianController.add);
 physicianRouter.route('/get').get(protect, physicianController.getPhysicians);
 
 physicianRouter
-	.route('/getpatient/:id')
+	.route('/getphysician/:id')
 	.get(protect, physicianController.getPhysician);
 
 physicianRouter

@@ -12,8 +12,9 @@ const notFound = (err, req, res, next) => {
 };
 exports.notFound = notFound;
 const errorHandler = (req, res, next) => {
-    const error = new Error(`Not found: ${req.originalUrl}`);
-    res.status(404).json({ message: error });
+    let errorMessage = `Not found: ${req.originalUrl}`;
+    const error = new Error(errorMessage);
+    res.status(404);
     next(error);
 };
 exports.errorHandler = errorHandler;
