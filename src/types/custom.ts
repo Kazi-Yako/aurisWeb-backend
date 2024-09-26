@@ -1,3 +1,5 @@
+import { GridColDef } from '@mui/x-data-grid';
+
 export const SUPPORTED_LANGUAGES = ['en', 'fr'];
 
 // this syntax is equals to "en" | "fr"
@@ -43,7 +45,9 @@ export interface IPatient {
 	personalPhone?: string;
 	workPhone?: string;
 	assuranceName?: string;
-	submit: string | undefined;
+	submit?: string;
+	createdAt?: string;
+	updatedAt?: string;
 }
 
 export interface IDiagnosis {
@@ -83,4 +87,17 @@ export interface IPhysician {
 	personalPhone?: string;
 	workPhone?: string;
 	submit?: string;
+}
+
+export interface IColumns {
+	field: string;
+	headerName: string;
+	width?: number;
+	groupable?: boolean;
+	type?: string;
+	valueFormatter?: () => {};
+}
+export interface IPatientData {
+	columns: GridColDef[];
+	rows: IPatient[];
 }

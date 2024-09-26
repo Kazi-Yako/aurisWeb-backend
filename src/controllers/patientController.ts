@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { IPatient } from '../types/custom';
 import Patient from '../models/patientModel';
 import { ObjectId } from 'mongodb';
+import { convertDate } from '../utils/common';
 
 const add = async (req: Request, res: Response) => {
 	try {
@@ -75,7 +76,38 @@ const getPatients = async (req: Request, res: Response) => {
 	try {
 		const patients: IPatient[] = await Patient.find({});
 
-		res.status(200).json(patients);
+		let newPatients: IPatient[] = [];
+
+		for (let patient of patients) {
+			let newPatient: IPatient = {
+				_id: patient._id,
+				firstName: patient.firstName,
+				lastName: patient.lastName,
+				middleName: patient.middleName,
+				gender: patient.gender,
+				address1: patient.address1,
+				address2: patient.address2,
+				city: patient.city,
+				state: patient.state,
+				zipCode: patient.zipCode,
+				country: patient.country,
+				email: patient.email,
+				personalPhone: patient.personalPhone,
+				workPhone: patient.workPhone,
+				assuranceName: patient.assuranceName,
+				dob: convertDate(patient.dob),
+			};
+
+			if (patient.createdAt)
+				newPatient.createdAt = convertDate(patient.createdAt);
+
+			if (patient.updatedAt)
+				newPatient.updatedAt = convertDate(patient.updatedAt);
+
+			newPatients.push(newPatient);
+		}
+
+		res.status(200).json(newPatients);
 	} catch (err) {
 		res.status(500).json({ type: err });
 	}

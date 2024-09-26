@@ -16,6 +16,7 @@ exports.deletePatient = exports.updatePatient = exports.getPatient = exports.get
 const errors_1 = require("../errors");
 const patientModel_1 = __importDefault(require("../models/patientModel"));
 const mongodb_1 = require("mongodb");
+const common_1 = require("../utils/common");
 const add = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let { firstName, middleName, lastName, gender, dob, address1, address2, city, state, zipCode, country, email, personalPhone, workPhone, assuranceName, } = req.body;
@@ -65,7 +66,168 @@ exports.add = add;
 const getPatients = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const patients = yield patientModel_1.default.find({});
-        res.status(200).json(patients);
+        let newPatients = [];
+        for (let patient of patients) {
+            let newPatient = {
+                _id: patient._id,
+                firstName: patient.firstName,
+                lastName: patient.lastName,
+                middleName: patient.middleName,
+                gender: patient.gender,
+                address1: patient.address1,
+                address2: patient.address2,
+                city: patient.city,
+                state: patient.state,
+                zipCode: patient.zipCode,
+                country: patient.country,
+                email: patient.email,
+                personalPhone: patient.personalPhone,
+                workPhone: patient.workPhone,
+                assuranceName: patient.assuranceName,
+                dob: (0, common_1.convertDate)(patient.dob),
+            };
+            if (patient.createdAt)
+                newPatient.createdAt = (0, common_1.convertDate)(patient.createdAt);
+            if (patient.updatedAt)
+                newPatient.updatedAt = (0, common_1.convertDate)(patient.updatedAt);
+            newPatients.push(newPatient);
+        }
+        // let buildPatients: IPatientData = {
+        // 	columns: [
+        // 		{
+        // 			field: 'firstName',
+        // 			headerName: 'FIRST NAME',
+        // 			width: 150,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			// renderCell: (params) => {
+        // 			// 	return <Link href={`/dashboard/patient/${params.id}`}>${params.value}</Link>;
+        //             // }
+        // 		},
+        // 		{
+        // 			field: 'middleName',
+        // 			headerName: 'MIDDLE NAME',
+        // 			width: 150,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'lastName',
+        // 			headerName: 'LAST NAME',
+        // 			width: 150,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'gender',
+        // 			headerName: 'GENDER',
+        // 			width: 150,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'dob',
+        // 			headerName: 'DOB',
+        // 			width: 150,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'address1',
+        // 			headerName: 'ADDRESS 1',
+        // 			width: 150,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'address2',
+        // 			headerName: 'ADDRESS 2',
+        // 			width: 150,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'city',
+        // 			headerName: 'CITY',
+        // 			width: 150,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'state',
+        // 			headerName: 'STATE',
+        // 			width: 150,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'zipCode',
+        // 			headerName: 'ZIP CODE',
+        // 			width: 150,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'country',
+        // 			headerName: 'COUNTRY',
+        // 			width: 150,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'email',
+        // 			headerName: 'EMAIL',
+        // 			width: 250,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'personalPhone',
+        // 			headerName: 'MOBILE PHONE',
+        // 			width: 200,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'workPhone',
+        // 			headerName: 'WORK PHONE',
+        // 			width: 200,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'assuranceName',
+        // 			headerName: 'ASSURANCE NAME',
+        // 			width: 250,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 		{
+        // 			field: 'createdAt',
+        // 			headerName: 'REGISTERED DATE',
+        // 			width: 200,
+        // 			type: 'string',
+        // 			groupable: false,
+        // 			valueFormatter: undefined,
+        // 		},
+        // 	],
+        // 	rows: newPatients,
+        // };
+        res.status(200).json(newPatients);
     }
     catch (err) {
         res.status(500).json({ type: err });
