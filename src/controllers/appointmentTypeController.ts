@@ -1,6 +1,6 @@
 import { TypeOfRdvErrors } from '../errors';
 import { Request, Response } from 'express';
-import { ITypeOfRdv } from '../types/custom';
+import { ITypeOfAppointment } from '../types/custom';
 import TypeOfRdv from '../models/typeOfRdvModel';
 import { ObjectId } from 'mongodb';
 
@@ -13,7 +13,7 @@ const add = async (req: Request, res: Response) => {
 		let descriptionLower = new String(description).toLowerCase();
 
 		// check if the type of RDV exists in db
-		const typeOfRdv: ITypeOfRdv | null = await TypeOfRdv.findOne({
+		const typeOfRdv: ITypeOfAppointment | null = await TypeOfRdv.findOne({
 			name: nameLower,
 			shortName: shortNameLower,
 		});
@@ -41,9 +41,9 @@ const add = async (req: Request, res: Response) => {
 	}
 };
 
-const getTypeOfRdvs = async (req: Request, res: Response) => {
+const getAppointmentTypes = async (req: Request, res: Response) => {
 	try {
-		const typeOfRdvs: ITypeOfRdv[] = await TypeOfRdv.find({});
+		const typeOfRdvs: ITypeOfAppointment[] = await TypeOfRdv.find({});
 
 		res.status(200).json(typeOfRdvs);
 	} catch (err) {
@@ -51,7 +51,7 @@ const getTypeOfRdvs = async (req: Request, res: Response) => {
 	}
 };
 
-const getTypeOfRdv = async (req: Request, res: Response) => {
+const getAppointmentType = async (req: Request, res: Response) => {
 	try {
 		const { id } = req.params;
 
@@ -75,7 +75,7 @@ const getTypeOfRdv = async (req: Request, res: Response) => {
 	}
 };
 
-const updateTypeOfRdv = async (req: Request, res: Response) => {
+const updateAppointmentType = async (req: Request, res: Response) => {
 	try {
 		const typeOfRdv = await TypeOfRdv.findOneAndUpdate(
 			{ _id: new ObjectId(req.params.id) },
@@ -100,7 +100,7 @@ const updateTypeOfRdv = async (req: Request, res: Response) => {
 	}
 };
 
-const deleteTypeOfRdv = async (req: Request, res: Response) => {
+const deleteAppointmentType = async (req: Request, res: Response) => {
 	try {
 		const typeOfRdv = await TypeOfRdv.findOneAndDelete({
 			_id: new ObjectId(req.params.id),
@@ -119,4 +119,10 @@ const deleteTypeOfRdv = async (req: Request, res: Response) => {
 	}
 };
 
-export { add, getTypeOfRdvs, getTypeOfRdv, updateTypeOfRdv, deleteTypeOfRdv };
+export {
+	add,
+	getAppointmentTypes,
+	getAppointmentType,
+	updateAppointmentType,
+	deleteAppointmentType,
+};

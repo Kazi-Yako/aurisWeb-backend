@@ -7,7 +7,7 @@ import userRoutes from './routes/userRoutes';
 import patientRoutes from './routes/patientRoutes';
 import { errorHandler, notFound } from './middleware/errorMiddleware';
 import diagnosisRoutes from './routes/diagnosisRoutes';
-import typeOfRdvRoutes from './routes/typeOfRdvRoutes';
+import apppointmentTypeRoutes from './routes/apppointmentTypeRoutes';
 import physicianRoutes from './routes/physicianRoutes';
 
 dotenv.config();
@@ -26,7 +26,7 @@ app.use(cors());
 app.use('/api/user', userRoutes);
 app.use('/api/patient', patientRoutes);
 app.use('/api/diagnosis', diagnosisRoutes);
-app.use('/api/typeofrdv', typeOfRdvRoutes);
+app.use('/api/appointmentType', apppointmentTypeRoutes);
 app.use('/api/physician', physicianRoutes);
 
 // deployment configuration

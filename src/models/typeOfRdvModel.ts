@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { ITypeOfRdv } from '../types/custom';
+import { ITypeOfAppointment } from '../types/custom';
 
-const typeOfRdvSchema = new Schema<ITypeOfRdv>(
+const typeOfRdvSchema = new Schema<ITypeOfAppointment>(
 	{
 		name: {
 			type: String,
@@ -20,6 +20,6 @@ const typeOfRdvSchema = new Schema<ITypeOfRdv>(
 	}
 );
 
-const typeOfRdvModel = model<ITypeOfRdv>('typeOfRdvs', typeOfRdvSchema);
+const typeOfRdvModel = model<ITypeOfAppointment>('typeOfRdvs', typeOfRdvSchema);
 
 export default typeOfRdvModel;
