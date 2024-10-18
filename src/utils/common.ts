@@ -9,4 +9,26 @@ const convertDate = (dt: string) => {
 	return newDate;
 };
 
-export { convertDate };
+const padTwoDigits = (num: number) => {
+	return num.toString().padStart(2, '0');
+};
+
+const timeToSave = (dt: string) => {
+	let tdate = new Date(dt);
+	return [
+		padTwoDigits(tdate.getHours()),
+		padTwoDigits(tdate.getMinutes()),
+		padTwoDigits(tdate.getSeconds()),
+	].join(':');
+};
+
+const dateToSave = (dt: string) => {
+	let tdate = new Date(dt);
+	return [
+		tdate.getFullYear(),
+		padTwoDigits(tdate.getMonth() + 1),
+		padTwoDigits(tdate.getDate()),
+	].join('-');
+};
+
+export { convertDate, timeToSave, dateToSave };

@@ -14,6 +14,7 @@ const errorMiddleware_1 = require("./middleware/errorMiddleware");
 const diagnosisRoutes_1 = __importDefault(require("./routes/diagnosisRoutes"));
 const apppointmentTypeRoutes_1 = __importDefault(require("./routes/apppointmentTypeRoutes"));
 const physicianRoutes_1 = __importDefault(require("./routes/physicianRoutes"));
+const appointmentRoutes_1 = __importDefault(require("./routes/appointmentRoutes"));
 dotenv_1.default.config();
 // connect to database
 (0, db_1.default)();
@@ -27,6 +28,7 @@ app.use('/api/patient', patientRoutes_1.default);
 app.use('/api/diagnosis', diagnosisRoutes_1.default);
 app.use('/api/appointmentType', apppointmentTypeRoutes_1.default);
 app.use('/api/physician', physicianRoutes_1.default);
+app.use('/api/appointment', appointmentRoutes_1.default);
 // deployment configuration
 if (process.env.NODE_ENV === 'production') {
     app.use(express_1.default.static(path_1.default.join(__dirname, '/frontend/build')));

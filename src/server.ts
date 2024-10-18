@@ -9,6 +9,7 @@ import { errorHandler, notFound } from './middleware/errorMiddleware';
 import diagnosisRoutes from './routes/diagnosisRoutes';
 import apppointmentTypeRoutes from './routes/apppointmentTypeRoutes';
 import physicianRoutes from './routes/physicianRoutes';
+import appointmentRoutes from './routes/appointmentRoutes';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use('/api/patient', patientRoutes);
 app.use('/api/diagnosis', diagnosisRoutes);
 app.use('/api/appointmentType', apppointmentTypeRoutes);
 app.use('/api/physician', physicianRoutes);
+app.use('/api/appointment', appointmentRoutes);
 
 // deployment configuration
 if (process.env.NODE_ENV === 'production') {

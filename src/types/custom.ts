@@ -96,3 +96,22 @@ export interface IColumns {
 	type?: string;
 	valueFormatter?: () => {};
 }
+
+export interface IAppointment {
+	_id?: string;
+	firstName?: string;
+	middleName?: string;
+	lastName?: string;
+	gender?: string;
+	dob?: string;
+	appointmentType?: string;
+	patientStatus?: string;
+	apptStatus?: string;
+	waitTime?: string;
+	apptTime?: string;
+	apptDate?: string;
+	arrivalTime?: string;
+	reason?: string;
+	doctor?: string;
+	submit?: string;
+}

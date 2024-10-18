@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PhysicianErrors = exports.TypeOfRdvErrors = exports.DiagnosisErrors = exports.PatientErrors = exports.UserErrors = void 0;
+exports.AppointmentErrors = exports.PhysicianErrors = exports.TypeOfRdvErrors = exports.DiagnosisErrors = exports.PatientErrors = exports.UserErrors = void 0;
 var UserErrors;
 (function (UserErrors) {
     UserErrors["NO_USER_FOUND"] = "User not found";
@@ -31,4 +31,10 @@ var PhysicianErrors;
     PhysicianErrors["PHYSICIAN_ALREADY_EXISTS"] = "Physician already exists";
     PhysicianErrors["PHYSICIAN_ID_IS_REQUIRED"] = "Physician ID is required";
 })(PhysicianErrors || (exports.PhysicianErrors = PhysicianErrors = {}));
+var AppointmentErrors;
+(function (AppointmentErrors) {
+    AppointmentErrors["APPOINTMENT_NOT_FOUND"] = "Appointment is not found";
+    AppointmentErrors["APPOINTMENT_ALREADY_EXISTS"] = "Appointment exists already";
+    AppointmentErrors["PATIENT_ID_IS_REQUIRED"] = "Patient ID is required to set up an Appointment";
+})(AppointmentErrors || (exports.AppointmentErrors = AppointmentErrors = {}));
 //# sourceMappingURL=errors.js.map

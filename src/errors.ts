@@ -27,3 +27,9 @@ export enum PhysicianErrors {
 	PHYSICIAN_ALREADY_EXISTS = 'Physician already exists',
 	PHYSICIAN_ID_IS_REQUIRED = 'Physician ID is required',
 }
+
+export enum AppointmentErrors {
+	APPOINTMENT_NOT_FOUND = 'Appointment is not found',
+	APPOINTMENT_ALREADY_EXISTS = 'Appointment exists already',
+	PATIENT_ID_IS_REQUIRED = 'Patient ID is required to set up an Appointment',
+}
