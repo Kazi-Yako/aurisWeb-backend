@@ -16,13 +16,15 @@ const add = async (req: Request, res: Response) => {
 			appointmentType,
 			apptDate,
 			apptTime,
+			isNewPatient,
 		} = req.body;
 
 		let firstNameLower = new String(firstName).toLowerCase();
 		let lastNameLower = new String(lastName).toLowerCase();
 		let middleNameLower = new String(middleName).toLowerCase();
 
-		let newTime = timeToSave(apptTime);
+		// let newTime = timeToSave(apptTime);
+		let newTime = new Date(apptTime).toLocaleTimeString();
 
 		let newDate = dateToSave(apptDate);
 
@@ -50,6 +52,7 @@ const add = async (req: Request, res: Response) => {
 			doctor: doctor,
 			appointmentType: appointmentType,
 			apptTime: newTime,
+			isNewPatient: isNewPatient,
 		});
 
 		await newAppointment.save();
@@ -65,6 +68,33 @@ const add = async (req: Request, res: Response) => {
 const getAppointments = async (req: Request, res: Response) => {
 	try {
 		const appointments: IAppointment[] = await Appointment.find({});
+
+		res.status(200).json(appointments);
+	} catch (err) {
+		res.status(500).json({ type: err });
+	}
+};
+
+const getTodayAppointments = async (req: Request, res: Response) => {
+	try {
+		const { today } = req.params;
+
+		if (!today) {
+			return res.status(400).json({
+				message: AppointmentErrors.APPOINTMENT_DATE_IS_NOT_PROVIDED,
+			});
+		}
+		const appointments: IAppointment[] = await Appointment.find({
+			apptDate: today,
+		});
+
+		// let newAppointments = appointments.map((item) => {
+		//     if(item.apptStatus == 'completed'){
+		//         return { ...item, patientStatus: 'existing'}
+		//     } else{
+		//         return {...item, patientStatus: 'new'}
+		//     }
+		// });
 
 		res.status(200).json(appointments);
 	} catch (err) {
@@ -148,4 +178,5 @@ export {
 	getAppointment,
 	updateAppointment,
 	deleteAppointment,
+	getTodayAppointments,
 };

@@ -36,5 +36,6 @@ var AppointmentErrors;
     AppointmentErrors["APPOINTMENT_NOT_FOUND"] = "Appointment is not found";
     AppointmentErrors["APPOINTMENT_ALREADY_EXISTS"] = "Appointment exists already";
     AppointmentErrors["PATIENT_ID_IS_REQUIRED"] = "Patient ID is required to set up an Appointment";
+    AppointmentErrors["APPOINTMENT_DATE_IS_NOT_PROVIDED"] = "Appointment date is not provided";
 })(AppointmentErrors || (exports.AppointmentErrors = AppointmentErrors = {}));
 //# sourceMappingURL=errors.js.map

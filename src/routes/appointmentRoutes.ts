@@ -11,6 +11,10 @@ appointmentRoutes
 	.get(protect, appointmentController.getAppointments);
 
 appointmentRoutes
+	.route('/get/:today')
+	.get(protect, appointmentController.getTodayAppointments);
+
+appointmentRoutes
 	.route('/getAppointment/:id')
 	.get(protect, appointmentController.getAppointment);
 

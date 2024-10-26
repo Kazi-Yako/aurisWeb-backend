@@ -13,7 +13,7 @@ const notFound = (
 	res.json({
 		message: err.message,
 		// provide stack property only in development mode
-		stack: (process.env.NODE_ENV = 'production' ? null : err.stack),
+		stack: process.env.NODE_ENV == 'production' ? null : err.stack,
 	});
 };
 

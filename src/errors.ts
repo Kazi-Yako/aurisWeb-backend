@@ -32,4 +32,5 @@ export enum AppointmentErrors {
 	APPOINTMENT_NOT_FOUND = 'Appointment is not found',
 	APPOINTMENT_ALREADY_EXISTS = 'Appointment exists already',
 	PATIENT_ID_IS_REQUIRED = 'Patient ID is required to set up an Appointment',
+	APPOINTMENT_DATE_IS_NOT_PROVIDED = 'Appointment date is not provided',
 }

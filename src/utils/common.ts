@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 const convertDate = (dt: string) => {
 	let tdate = new Date(dt);
 	let newDate =
@@ -31,4 +33,14 @@ const dateToSave = (dt: string) => {
 	].join('-');
 };
 
-export { convertDate, timeToSave, dateToSave };
+const formatDateString = (dt: string | undefined, pattern: string) => {
+	var newDateformat = '';
+	if (dt) {
+		const newDate = new Date(dt);
+		newDateformat = format(newDate, pattern);
+	}
+
+	return newDateformat;
+};
+
+export { convertDate, timeToSave, dateToSave, formatDateString };

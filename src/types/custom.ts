@@ -46,6 +46,7 @@ export interface IPatient {
 	submit?: string;
 	createdAt?: string;
 	updatedAt?: string;
+	isNewPatient?: boolean;
 }
 
 export interface IDiagnosis {
@@ -105,7 +106,7 @@ export interface IAppointment {
 	gender?: string;
 	dob?: string;
 	appointmentType?: string;
-	patientStatus?: string;
+	isNewPatient?: boolean;
 	apptStatus?: string;
 	waitTime?: string;
 	apptTime?: string;

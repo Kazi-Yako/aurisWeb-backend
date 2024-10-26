@@ -59,6 +59,10 @@ const patientSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    isNewPatient: {
+        type: Boolean,
+        required: true,
+    },
 }, {
     timestamps: true,
 });

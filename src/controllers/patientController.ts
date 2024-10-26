@@ -62,6 +62,7 @@ const add = async (req: Request, res: Response) => {
 			personalPhone,
 			workPhone,
 			assuranceName,
+			isNewPatient: true,
 		});
 
 		await newPatient.save();
@@ -96,6 +97,7 @@ const getPatients = async (req: Request, res: Response) => {
 				workPhone: patient.workPhone,
 				assuranceName: patient.assuranceName,
 				dob: convertDate(patient.dob),
+				isNewPatient: patient.isNewPatient,
 			};
 
 			if (patient.createdAt)

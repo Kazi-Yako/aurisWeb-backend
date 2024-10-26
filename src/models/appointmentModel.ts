@@ -34,6 +34,22 @@ const appointmentSchema = new Schema<IAppointment>(
 			type: String,
 			required: true,
 		},
+		arrivalTime: {
+			type: String,
+			required: false,
+		},
+		waitTime: {
+			type: String,
+			required: false,
+		},
+		apptStatus: {
+			type: String,
+			required: false,
+		},
+		isNewPatient: {
+			type: Boolean,
+			required: false,
+		},
 	},
 	{
 		timestamps: true,

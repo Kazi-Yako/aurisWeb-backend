@@ -60,6 +60,10 @@ const patientSchema = new Schema<IPatient>(
 			type: String,
 			required: true,
 		},
+		isNewPatient: {
+			type: Boolean,
+			required: true,
+		},
 	},
 	{
 		timestamps: true,

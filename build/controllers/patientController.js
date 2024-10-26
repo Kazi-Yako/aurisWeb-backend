@@ -54,6 +54,7 @@ const add = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             personalPhone,
             workPhone,
             assuranceName,
+            isNewPatient: true,
         });
         yield newPatient.save();
         res.status(200).json({ message: 'Patient added successfully' });
@@ -85,6 +86,7 @@ const getPatients = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 workPhone: patient.workPhone,
                 assuranceName: patient.assuranceName,
                 dob: (0, common_1.convertDate)(patient.dob),
+                isNewPatient: patient.isNewPatient,
             };
             if (patient.createdAt)
                 newPatient.createdAt = (0, common_1.convertDate)(patient.createdAt);
