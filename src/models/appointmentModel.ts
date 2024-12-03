@@ -27,15 +27,15 @@ const appointmentSchema = new Schema<IAppointment>(
 			required: true,
 		},
 		apptDate: {
-			type: String,
+			type: Date,
 			required: true,
 		},
 		apptTime: {
-			type: String,
+			type: Date,
 			required: true,
 		},
 		arrivalTime: {
-			type: String,
+			type: Date,
 			required: false,
 		},
 		waitTime: {

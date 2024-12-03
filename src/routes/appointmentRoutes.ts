@@ -11,7 +11,7 @@ appointmentRoutes
 	.get(protect, appointmentController.getAppointments);
 
 appointmentRoutes
-	.route('/get/:today')
+	.route('/getTodayAppointments')
 	.get(protect, appointmentController.getTodayAppointments);
 
 appointmentRoutes

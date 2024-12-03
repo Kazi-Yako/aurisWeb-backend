@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { IAppointment } from '../types/custom';
 import Appointment from '../models/appointmentModel';
 import { ObjectId } from 'mongodb';
-import { timeToSave, dateToSave } from '../utils/common';
+import { dateToSave, formatDateString } from '../utils/common';
 
 const add = async (req: Request, res: Response) => {
 	try {
@@ -23,17 +23,17 @@ const add = async (req: Request, res: Response) => {
 		let lastNameLower = new String(lastName).toLowerCase();
 		let middleNameLower = new String(middleName).toLowerCase();
 
-		// let newTime = timeToSave(apptTime);
-		let newTime = new Date(apptTime).toLocaleTimeString();
+		//let newTime = new Date(apptTime).toLocaleTimeString();
 
-		let newDate = dateToSave(apptDate);
+		//let newDate = dateToSave(apptDate);
 
 		// check if the appointment exists in db
 		const appointment: IAppointment | null = await Appointment.findOne({
 			firstName: firstNameLower,
 			middleName: middleNameLower,
 			lastName: lastNameLower,
-			apptDate: newDate,
+			// apptDate: newDate,
+			apptDate,
 		});
 
 		if (appointment) {
@@ -47,11 +47,13 @@ const add = async (req: Request, res: Response) => {
 			firstName: firstNameLower,
 			middleName: middleNameLower,
 			lastName: lastNameLower,
-			apptDate: newDate,
+			// apptDate: newDate,
+			apptDate,
 			reason: reason,
 			doctor: doctor,
 			appointmentType: appointmentType,
-			apptTime: newTime,
+			// apptTime: newTime,
+			apptTime,
 			isNewPatient: isNewPatient,
 		});
 
@@ -77,24 +79,16 @@ const getAppointments = async (req: Request, res: Response) => {
 
 const getTodayAppointments = async (req: Request, res: Response) => {
 	try {
-		const { today } = req.params;
+		const beginOfDate = new Date().setHours(0, 0, 0, 0);
 
-		if (!today) {
-			return res.status(400).json({
-				message: AppointmentErrors.APPOINTMENT_DATE_IS_NOT_PROVIDED,
-			});
-		}
+		const endOfDate = new Date().setHours(23, 59, 59, 999);
+
 		const appointments: IAppointment[] = await Appointment.find({
-			apptDate: today,
+			apptDate: {
+				$gte: beginOfDate,
+				$lt: endOfDate,
+			},
 		});
-
-		// let newAppointments = appointments.map((item) => {
-		//     if(item.apptStatus == 'completed'){
-		//         return { ...item, patientStatus: 'existing'}
-		//     } else{
-		//         return {...item, patientStatus: 'new'}
-		//     }
-		// });
 
 		res.status(200).json(appointments);
 	} catch (err) {
