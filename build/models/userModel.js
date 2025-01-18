@@ -35,6 +35,7 @@ const userSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
+userSchema.index({ email: 1 }, { unique: true });
 // extend matchPassword function unto userSchema
 userSchema.methods.matchPassword = function (enteredPassword) {
     return __awaiter(this, void 0, void 0, function* () {

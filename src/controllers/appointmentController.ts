@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { IAppointment } from '../types/custom';
 import Appointment from '../models/appointmentModel';
 import { ObjectId } from 'mongodb';
-import { dateToSave, formatDateString } from '../utils/common';
 
 const add = async (req: Request, res: Response) => {
 	try {
@@ -23,16 +22,11 @@ const add = async (req: Request, res: Response) => {
 		let lastNameLower = new String(lastName).toLowerCase();
 		let middleNameLower = new String(middleName).toLowerCase();
 
-		//let newTime = new Date(apptTime).toLocaleTimeString();
-
-		//let newDate = dateToSave(apptDate);
-
 		// check if the appointment exists in db
 		const appointment: IAppointment | null = await Appointment.findOne({
 			firstName: firstNameLower,
 			middleName: middleNameLower,
 			lastName: lastNameLower,
-			// apptDate: newDate,
 			apptDate,
 		});
 
@@ -47,12 +41,10 @@ const add = async (req: Request, res: Response) => {
 			firstName: firstNameLower,
 			middleName: middleNameLower,
 			lastName: lastNameLower,
-			// apptDate: newDate,
 			apptDate,
 			reason: reason,
 			doctor: doctor,
 			appointmentType: appointmentType,
-			// apptTime: newTime,
 			apptTime,
 			isNewPatient: isNewPatient,
 		});

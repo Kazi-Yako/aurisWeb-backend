@@ -20,4 +20,6 @@ patientRouter
 	.route('/delete/:id')
 	.delete(protect, patientController.deletePatient);
 
+patientRouter.route('/search').get(protect, patientController.searchPatients);
+
 export default patientRouter;

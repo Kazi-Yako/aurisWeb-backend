@@ -1,6 +1,6 @@
 import { PatientErrors } from '../errors';
 import { Request, Response } from 'express';
-import { IPatient } from '../types/custom';
+import { IPatient, patientSearch } from '../types/custom';
 import Patient from '../models/patientModel';
 import { ObjectId } from 'mongodb';
 import { convertDate } from '../utils/common';
@@ -68,6 +68,32 @@ const add = async (req: Request, res: Response) => {
 		await newPatient.save();
 
 		res.status(200).json({ message: 'Patient added successfully' });
+	} catch (err) {
+		res.status(500).json({ type: err });
+	}
+};
+
+const searchPatients = async (req: Request, res: Response) => {
+	try {
+		console.log(req.query);
+
+		const { firstName, lastName, dob } = req.query;
+
+		let searchOptions: patientSearch = {
+			firstName: '',
+			lastName: '',
+			dob: '',
+		};
+
+		if (firstName)
+			searchOptions.firstName = firstName.toString().toLowerCase();
+		if (lastName)
+			searchOptions.lastName = lastName.toString().toLowerCase();
+		if (dob) searchOptions.dob = dob.toString();
+
+		const patients: IPatient[] = await Patient.find(searchOptions);
+
+		res.status(200).json(patients);
 	} catch (err) {
 		res.status(500).json({ type: err });
 	}
@@ -179,4 +205,11 @@ const deletePatient = async (req: Request, res: Response) => {
 	}
 };
 
-export { add, getPatients, getPatient, updatePatient, deletePatient };
+export {
+	add,
+	getPatients,
+	getPatient,
+	updatePatient,
+	deletePatient,
+	searchPatients,
+};

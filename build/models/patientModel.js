@@ -66,6 +66,7 @@ const patientSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
+patientSchema.index({ firstName: 1, lastName: 1, dob: 1 }, { unique: true });
 const PatientModel = (0, mongoose_1.model)('patients', patientSchema);
 exports.default = PatientModel;
 //# sourceMappingURL=patientModel.js.map

@@ -41,5 +41,6 @@ patientRouter
 patientRouter
     .route('/delete/:id')
     .delete(authMiddleware_1.protect, patientController.deletePatient);
+patientRouter.route('/search').get(authMiddleware_1.protect, patientController.searchPatients);
 exports.default = patientRouter;
 //# sourceMappingURL=patientRoutes.js.map

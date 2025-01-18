@@ -70,6 +70,8 @@ const patientSchema = new Schema<IPatient>(
 	}
 );
 
+patientSchema.index({ firstName: 1, lastName: 1, dob: 1 }, { unique: true });
+
 const PatientModel = model<IPatient>('patients', patientSchema);
 
 export default PatientModel;

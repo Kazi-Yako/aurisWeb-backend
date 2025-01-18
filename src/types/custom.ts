@@ -116,3 +116,9 @@ export interface IAppointment {
 	doctor?: string;
 	submit?: string;
 }
+
+export interface patientSearch {
+	firstName: string;
+	lastName: string;
+	dob: string;
+}

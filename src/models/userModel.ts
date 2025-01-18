@@ -27,6 +27,8 @@ const userSchema = new Schema<UserAttributes>(
 	}
 );
 
+userSchema.index({ email: 1 }, { unique: true });
+
 // extend matchPassword function unto userSchema
 userSchema.methods.matchPassword = async function (enteredPassword: string) {
 	return await bcrypt.compare(enteredPassword, this.password);
