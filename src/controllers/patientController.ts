@@ -25,12 +25,12 @@ const add = async (req: Request, res: Response) => {
 			assuranceName,
 		} = req.body;
 
-		let firstNameLower = new String(firstName).toLowerCase();
+		let firstNameLower = firstName.toString().toLowerCase();
 		let middleNameLower = middleName
-			? new String(middleName).toLowerCase()
+			? middleName.toString().toLowerCase()
 			: '';
-		let lastNameLower = new String(lastName).toLowerCase();
-		let formattedDob = new Date(dob).toString();
+		let lastNameLower = lastName.toString().toLowerCase();
+		let formattedDob = dob.toString();
 
 		// check if the patient exists in db
 		const patient: IPatient | null = await Patient.findOne({
@@ -75,8 +75,6 @@ const add = async (req: Request, res: Response) => {
 
 const searchPatients = async (req: Request, res: Response) => {
 	try {
-		console.log(req.query);
-
 		const { firstName, lastName, dob } = req.query;
 
 		let searchOptions: patientSearch = {

@@ -20,12 +20,12 @@ const common_1 = require("../utils/common");
 const add = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let { firstName, middleName, lastName, gender, dob, address1, address2, city, state, zipCode, country, email, personalPhone, workPhone, assuranceName, } = req.body;
-        let firstNameLower = new String(firstName).toLowerCase();
+        let firstNameLower = firstName.toString().toLowerCase();
         let middleNameLower = middleName
-            ? new String(middleName).toLowerCase()
+            ? middleName.toString().toLowerCase()
             : '';
-        let lastNameLower = new String(lastName).toLowerCase();
-        let formattedDob = new Date(dob).toString();
+        let lastNameLower = lastName.toString().toLowerCase();
+        let formattedDob = dob.toString();
         // check if the patient exists in db
         const patient = yield patientModel_1.default.findOne({
             firstName: firstNameLower,
@@ -66,7 +66,6 @@ const add = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.add = add;
 const searchPatients = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log(req.query);
         const { firstName, lastName, dob } = req.query;
         let searchOptions = {
             firstName: '',
