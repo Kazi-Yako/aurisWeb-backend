@@ -23,6 +23,9 @@ const add = async (req: Request, res: Response) => {
 			personalPhone,
 			workPhone,
 			assuranceName,
+			allergies,
+			medications,
+			medicalHistory,
 		} = req.body;
 
 		let firstNameLower = firstName.toString().toLowerCase();
@@ -63,6 +66,9 @@ const add = async (req: Request, res: Response) => {
 			workPhone,
 			assuranceName,
 			isNewPatient: true,
+			allergies,
+			medications,
+			medicalHistory,
 		});
 
 		await newPatient.save();
@@ -122,6 +128,9 @@ const getPatients = async (req: Request, res: Response) => {
 				assuranceName: patient.assuranceName,
 				dob: convertDate(patient.dob),
 				isNewPatient: patient.isNewPatient,
+				allergies: patient.allergies,
+				medications: patient.medications,
+				medicalHistory: patient.medicalHistory,
 			};
 
 			if (patient.createdAt)

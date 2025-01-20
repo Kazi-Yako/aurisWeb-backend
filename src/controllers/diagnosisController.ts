@@ -6,24 +6,33 @@ import Patient from '../models/patientModel';
 import { ObjectId } from 'mongodb';
 
 const add = async (req: Request, res: Response) => {
-	const { firstName, lastName, gender, dob, complaints, additionalNotes } =
-		req.body;
+	const {
+		firstName,
+		lastName,
+		gender,
+		dob,
+		complaints,
+		additionalNotes,
+		diagnosis,
+		prescription,
+	} = req.body;
 
 	try {
-		let formattedDob = new Date(dob).toString();
+		let firstNameLower = firstName.toString().toLowerCase();
+		let lastNameLower = lastName.toString().toLowerCase();
+		let formattedDob = dob.toString();
 
 		// check if the patient exists in db
 		const patient: IPatient | null = await Patient.findOne({
-			firstName,
-			lastName,
-			gender,
+			firstName: firstNameLower,
+			lastName: lastNameLower,
 			dob: formattedDob,
 		});
 
 		if (!patient || patient == null) {
 			return res
 				.status(400)
-				.json({ type: PatientErrors.NO_PATIENT_FOUND });
+				.json({ message: PatientErrors.NO_PATIENT_FOUND });
 		}
 
 		// create new diagnosis document in db
@@ -31,9 +40,11 @@ const add = async (req: Request, res: Response) => {
 			firstName,
 			lastName,
 			gender,
-			dob: formattedDob,
+			dob,
 			complaints,
 			additionalNotes,
+			diagnosis,
+			prescription,
 		});
 
 		await newDiagnosis.save();

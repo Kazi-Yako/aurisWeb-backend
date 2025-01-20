@@ -64,6 +64,15 @@ const patientSchema = new Schema<IPatient>(
 			type: Boolean,
 			required: true,
 		},
+		allergies: {
+			type: String,
+		},
+		medications: {
+			type: String,
+		},
+		medicalHistory: {
+			type: String,
+		},
 	},
 	{
 		timestamps: true,

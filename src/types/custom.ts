@@ -47,6 +47,9 @@ export interface IPatient {
 	createdAt?: string;
 	updatedAt?: string;
 	isNewPatient?: boolean;
+	allergies?: string;
+	medications?: string;
+	medicalHistory?: string;
 }
 
 export interface IDiagnosis {
@@ -58,6 +61,8 @@ export interface IDiagnosis {
 	complaints: string;
 	additionalNotes?: string;
 	submit?: string;
+	diagnosis?: string;
+	prescription?: string;
 }
 
 export interface ITypeOfAppointment {

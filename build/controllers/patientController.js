@@ -19,7 +19,7 @@ const mongodb_1 = require("mongodb");
 const common_1 = require("../utils/common");
 const add = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let { firstName, middleName, lastName, gender, dob, address1, address2, city, state, zipCode, country, email, personalPhone, workPhone, assuranceName, } = req.body;
+        let { firstName, middleName, lastName, gender, dob, address1, address2, city, state, zipCode, country, email, personalPhone, workPhone, assuranceName, allergies, medications, medicalHistory, } = req.body;
         let firstNameLower = firstName.toString().toLowerCase();
         let middleNameLower = middleName
             ? middleName.toString().toLowerCase()
@@ -55,6 +55,9 @@ const add = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             workPhone,
             assuranceName,
             isNewPatient: true,
+            allergies,
+            medications,
+            medicalHistory,
         });
         yield newPatient.save();
         res.status(200).json({ message: 'Patient added successfully' });
@@ -109,6 +112,9 @@ const getPatients = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 assuranceName: patient.assuranceName,
                 dob: (0, common_1.convertDate)(patient.dob),
                 isNewPatient: patient.isNewPatient,
+                allergies: patient.allergies,
+                medications: patient.medications,
+                medicalHistory: patient.medicalHistory,
             };
             if (patient.createdAt)
                 newPatient.createdAt = (0, common_1.convertDate)(patient.createdAt);

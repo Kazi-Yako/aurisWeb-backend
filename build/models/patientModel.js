@@ -63,6 +63,15 @@ const patientSchema = new mongoose_1.Schema({
         type: Boolean,
         required: true,
     },
+    allergies: {
+        type: String,
+    },
+    medications: {
+        type: String,
+    },
+    medicalHistory: {
+        type: String,
+    },
 }, {
     timestamps: true,
 });
