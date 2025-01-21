@@ -1,6 +1,6 @@
 import { PatientErrors } from '../errors';
 import { Request, Response } from 'express';
-import { IPatient, patientSearch } from '../types/custom';
+import { IPatient, IPatientSearch } from '../types/custom';
 import Patient from '../models/patientModel';
 import { ObjectId } from 'mongodb';
 import { convertDate } from '../utils/common';
@@ -83,7 +83,7 @@ const searchPatients = async (req: Request, res: Response) => {
 	try {
 		const { firstName, lastName, dob } = req.query;
 
-		let searchOptions: patientSearch = {
+		let searchOptions: IPatientSearch = {
 			firstName: '',
 			lastName: '',
 			dob: '',
