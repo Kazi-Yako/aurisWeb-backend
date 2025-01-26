@@ -15,6 +15,7 @@ const add = async (req: Request, res: Response) => {
 		additionalNotes,
 		diagnosis,
 		prescription,
+		doctor,
 	} = req.body;
 
 	try {
@@ -45,6 +46,7 @@ const add = async (req: Request, res: Response) => {
 			additionalNotes,
 			diagnosis,
 			prescription,
+			doctor,
 		});
 
 		await newDiagnosis.save();

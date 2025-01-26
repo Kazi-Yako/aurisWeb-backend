@@ -123,6 +123,9 @@ export interface IAppointment {
 	reason?: string;
 	doctor?: string;
 	submit?: string;
+	allergies?: string;
+	medications?: string;
+	medicalHistory?: string;
 }
 
 export interface IPatientSearch {
@@ -132,20 +135,6 @@ export interface IPatientSearch {
 }
 
 export interface IMedicalRecord {
-	firstName: string;
-	middleName?: string;
-	lastName: string;
-	gender: string;
-	dob: string;
-	assuranceName?: string;
-	allergies?: string;
-	medications?: string;
-	medicalHistory?: string;
-	complaints: string;
-	additionalNotes?: string;
-	diagnosis?: string;
-	prescription?: string;
-	createdAt?: string;
-	appointmentType?: string;
-	doctor?: string;
+	patientInfo: IPatient;
+	diagnoses: IDiagnosis[];
 }

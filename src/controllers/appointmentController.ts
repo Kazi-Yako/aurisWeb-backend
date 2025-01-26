@@ -16,6 +16,9 @@ const add = async (req: Request, res: Response) => {
 			apptDate,
 			apptTime,
 			isNewPatient,
+			allergies,
+			medicalHistory,
+			medications,
 		} = req.body;
 
 		let firstNameLower = new String(firstName).toLowerCase();
@@ -47,6 +50,9 @@ const add = async (req: Request, res: Response) => {
 			appointmentType: appointmentType,
 			apptTime,
 			isNewPatient: isNewPatient,
+			allergies,
+			medicalHistory,
+			medications,
 		});
 
 		await newAppointment.save();

@@ -32,6 +32,9 @@ const diagnosisSchema = new Schema<IDiagnosis>(
 		prescription: {
 			type: String,
 		},
+		doctor: {
+			type: String,
+		},
 	},
 	{
 		timestamps: true,

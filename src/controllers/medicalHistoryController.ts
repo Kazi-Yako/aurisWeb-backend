@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
-import { IDiagnosis, IPatient, IPatientSearch } from '../types/custom';
+import {
+	IDiagnosis,
+	IMedicalRecord,
+	IPatient,
+	IPatientSearch,
+} from '../types/custom';
 import Patient from '../models/patientModel';
 import Diagnosis from '../models/diagnosisModel';
 import { ObjectId } from 'mongodb';
@@ -68,31 +73,17 @@ const getPatientMedicalRecords = async (req: Request, res: Response) => {
 
 		const patients: IPatient[] = await Patient.find(searchOptions);
 
-		const diagnoses: IDiagnosis[] = await Diagnosis.find({ searchOptions });
+		const diagnoses: IDiagnosis[] = await Diagnosis.find(searchOptions);
 
-		res.status(200).json(patients);
+		let patientRecord: IMedicalRecord = {
+			patientInfo: patients[0],
+			diagnoses: diagnoses,
+		};
+
+		res.status(200).json(patientRecord);
 	} catch (err) {
 		res.status(500).json({ type: err });
 	}
 };
 
 export { getMedicalRecords, getPatientMedicalRecords };
-
-// export interface IMedicalRecord {
-// 	firstName: string;
-// 	middleName?: string;
-// 	lastName: string;
-// 	gender: string;
-// 	dob: string;
-// 	assuranceName?: string;
-// 	allergies?: string;
-// 	medications?: string;
-// 	medicalHistory?: string;
-// 	complaints: string;
-// 	additionalNotes?: string;
-// 	diagnosis?: string;
-// 	prescription?: string;
-// 	createdAt?: string;
-// 	appointmentType?: string;
-// 	doctor?: string;
-// }

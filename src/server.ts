@@ -31,7 +31,7 @@ app.use('/api/diagnosis', diagnosisRoutes);
 app.use('/api/appointmentType', apppointmentTypeRoutes);
 app.use('/api/physician', physicianRoutes);
 app.use('/api/appointment', appointmentRoutes);
-app.use('api/medicalhistory', medicalHistoryRoutes);
+app.use('/api/medicalhistory', medicalHistoryRoutes);
 
 // deployment configuration
 if (process.env.NODE_ENV === 'production') {
