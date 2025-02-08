@@ -53,6 +53,7 @@ const add = async (req: Request, res: Response) => {
 			allergies,
 			medicalHistory,
 			medications,
+			apptStatus: 'Open',
 		});
 
 		await newAppointment.save();

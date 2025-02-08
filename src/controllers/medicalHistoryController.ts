@@ -7,7 +7,6 @@ import {
 } from '../types/custom';
 import Patient from '../models/patientModel';
 import Diagnosis from '../models/diagnosisModel';
-import { ObjectId } from 'mongodb';
 import { convertDate } from '../utils/common';
 
 const getMedicalRecords = async (req: Request, res: Response) => {
