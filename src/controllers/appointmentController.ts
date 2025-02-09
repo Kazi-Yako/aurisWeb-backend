@@ -1,7 +1,8 @@
 import { AppointmentErrors } from '../errors';
 import { Request, Response } from 'express';
-import { IAppointment } from '../types/custom';
+import { IAppointment, IDashboardState, Istats } from '../types/custom';
 import Appointment from '../models/appointmentModel';
+import Patient from '../models/patientModel';
 import { ObjectId } from 'mongodb';
 
 const add = async (req: Request, res: Response) => {
@@ -89,7 +90,31 @@ const getTodayAppointments = async (req: Request, res: Response) => {
 			},
 		});
 
-		res.status(200).json(appointments);
+		const numberOfAppointments = appointments.length;
+
+		const numberOfPatients = await Patient.countDocuments();
+
+		const completedAppointments = appointments.filter(
+			(appointment) => appointment.apptStatus === 'Completed'
+		);
+
+		const numberOfCompletedAppointments = completedAppointments.length;
+
+		const taskProgress =
+			(numberOfCompletedAppointments / numberOfAppointments) * 100;
+
+		const stats: Istats = {
+			totalNumberOfPatients: numberOfPatients,
+			numberOfAppts: numberOfAppointments,
+			taskProgress: parseFloat(taskProgress.toFixed(2)),
+		};
+
+		const dashboardState: IDashboardState = {
+			stats,
+			appointments,
+		};
+
+		res.status(200).json(dashboardState);
 	} catch (err) {
 		res.status(500).json({ type: err });
 	}

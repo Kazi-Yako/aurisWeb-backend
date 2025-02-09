@@ -128,6 +128,18 @@ export interface IAppointment {
 	medicalHistory?: string;
 }
 
+export interface Istats {
+	totalNumberOfPatients: number;
+	numberOfAppts: number;
+	taskProgress?: number;
+	patientsWithAppt?: IPatient[];
+}
+
+export interface IDashboardState {
+	stats: Istats;
+	appointments: IAppointment[];
+}
+
 export interface IPatientSearch {
 	firstName: string;
 	lastName: string;
