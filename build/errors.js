@@ -7,6 +7,7 @@ var UserErrors;
     UserErrors["WROND_CREDENTIALS"] = "Wrong credentials";
     UserErrors["USERNAME_ALREADY_EXISTS"] = "Username already exists";
     UserErrors["INVALID_EMAIL_OR_PASSWORD"] = "Invalid email or password";
+    UserErrors["EMAIL_IS_REQUIRED"] = "Email is required";
 })(UserErrors || (exports.UserErrors = UserErrors = {}));
 var PatientErrors;
 (function (PatientErrors) {

@@ -3,14 +3,15 @@ import { generateToken } from '../utils/generateToken';
 import { UserErrors } from '../errors';
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { UserAttributes } from '../types/custom';
+import { IUser } from '../types/custom';
+import { ObjectId } from 'mongodb';
 
 const registerUser = async (req: Request, res: Response) => {
-	const { firstName, lastName, email, password } = req.body;
+	const { firstName, lastName, email, password, role } = req.body;
 
 	try {
 		// check if email exists in db
-		const user: UserAttributes | null = await User.findOne({ email });
+		const user: IUser | null = await User.findOne({ email });
 
 		if (user) {
 			return res
@@ -27,6 +28,8 @@ const registerUser = async (req: Request, res: Response) => {
 			lastName,
 			email,
 			password: hashedPassword,
+			activeStatus: true,
+			role,
 		});
 
 		await newUser.save();
@@ -42,7 +45,7 @@ const loginUser = async (req: Request, res: Response) => {
 
 	try {
 		// check if user email exists in db
-		const user: UserAttributes | null = await User.findOne({ email });
+		const user: IUser | null = await User.findOne({ email });
 
 		// return user obj if their password matches
 		if (user && (await user.matchPassword(password))) {
@@ -83,4 +86,64 @@ const getUserProfile = async (req: Request, res: Response) => {
 	}
 };
 
-export { registerUser, loginUser, getUserProfile };
+const getUsers = async (req: Request, res: Response) => {
+	try {
+		const users = await User.find({});
+		res.json(users);
+	} catch (err) {
+		res.status(500).json({ type: err });
+	}
+};
+
+const getUserById = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+
+		if (!id) {
+			return res
+				.status(400)
+				.json({ message: UserErrors.EMAIL_IS_REQUIRED });
+		}
+
+		const user = await User.findOne({ _id: new ObjectId(id) });
+
+		if (!user) {
+			return res.status(404).json({ message: UserErrors.NO_USER_FOUND });
+		}
+
+		res.status(200).json(user);
+	} catch (err) {
+		res.status(500).json({ type: err });
+	}
+};
+
+const updateUser = async (req: Request, res: Response) => {
+	try {
+		const user = await User.findOneAndUpdate(
+			{ _id: req.params.id },
+			{
+				$set: req.body,
+			},
+			{
+				returnDocument: 'after',
+			}
+		);
+
+		if (!user) {
+			res.status(404).json({ message: UserErrors.NO_USER_FOUND });
+		}
+
+		res.status(200).json(user);
+	} catch (err) {
+		res.status(500).json({ type: err });
+	}
+};
+
+export {
+	registerUser,
+	loginUser,
+	getUserProfile,
+	getUsers,
+	getUserById,
+	updateUser,
+};

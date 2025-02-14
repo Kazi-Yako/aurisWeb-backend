@@ -158,7 +158,6 @@ const updatePatient = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             returnDocument: 'after',
         });
         if (!patient) {
-            console.log('Not Found');
             res.status(404).json({ message: errors_1.PatientErrors.NO_PATIENT_FOUND });
         }
         res.status(200).json(patient);

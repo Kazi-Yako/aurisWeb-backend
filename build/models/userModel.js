@@ -32,6 +32,14 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    status: {
+        type: String,
+        required: true,
+    },
+    role: {
+        type: String,
+        required: true,
+    },
 }, {
     timestamps: true,
 });

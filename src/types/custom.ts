@@ -3,7 +3,7 @@ export const SUPPORTED_LANGUAGES = ['en', 'fr'];
 // this syntax is equals to "en" | "fr"
 export type Language = (typeof SUPPORTED_LANGUAGES)[number];
 
-export interface UserAttributes extends Document {
+export interface IUser extends Document {
 	_id?: number;
 	firstName: string;
 	lastName: string;
@@ -11,15 +11,19 @@ export interface UserAttributes extends Document {
 	password: string;
 	userToken: string | null;
 	matchPassword(password: string): boolean;
+	status: string;
+	role: string;
+	createdAt?: string;
+	updatedAt?: string;
 }
 
-export interface LoginAttributes {
+export interface ILogin {
 	email: string;
 	password: string;
 }
 
 export interface authState {
-	userInfo: UserAttributes | null;
+	userInfo: IUser | null;
 	loading: boolean;
 	userToken: string | null;
 	error: string | null;

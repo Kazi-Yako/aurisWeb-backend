@@ -3,6 +3,7 @@ export enum UserErrors {
 	WROND_CREDENTIALS = 'Wrong credentials',
 	USERNAME_ALREADY_EXISTS = 'Username already exists',
 	INVALID_EMAIL_OR_PASSWORD = 'Invalid email or password',
+	EMAIL_IS_REQUIRED = 'Email is required',
 }
 
 export enum PatientErrors {

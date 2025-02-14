@@ -12,13 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserProfile = exports.loginUser = exports.registerUser = void 0;
+exports.updateUser = exports.getUserById = exports.getUsers = exports.getUserProfile = exports.loginUser = exports.registerUser = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 const generateToken_1 = require("../utils/generateToken");
 const errors_1 = require("../errors");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const mongodb_1 = require("mongodb");
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, role } = req.body;
     try {
         // check if email exists in db
         const user = yield userModel_1.default.findOne({ email });
@@ -35,6 +36,8 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             lastName,
             email,
             password: hashedPassword,
+            activeStatus: true,
+            role,
         });
         yield newUser.save();
         res.json({ message: 'User registered successfully' });
@@ -92,4 +95,50 @@ const getUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getUserProfile = getUserProfile;
+const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield userModel_1.default.find({});
+        res.json(users);
+    }
+    catch (err) {
+        res.status(500).json({ type: err });
+    }
+});
+exports.getUsers = getUsers;
+const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            return res
+                .status(400)
+                .json({ message: errors_1.UserErrors.EMAIL_IS_REQUIRED });
+        }
+        const user = yield userModel_1.default.findOne({ _id: new mongodb_1.ObjectId(id) });
+        if (!user) {
+            return res.status(404).json({ message: errors_1.UserErrors.NO_USER_FOUND });
+        }
+        res.status(200).json(user);
+    }
+    catch (err) {
+        res.status(500).json({ type: err });
+    }
+});
+exports.getUserById = getUserById;
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield userModel_1.default.findOneAndUpdate({ _id: req.params.id }, {
+            $set: req.body,
+        }, {
+            returnDocument: 'after',
+        });
+        if (!user) {
+            res.status(404).json({ message: errors_1.UserErrors.NO_USER_FOUND });
+        }
+        res.status(200).json(user);
+    }
+    catch (err) {
+        res.status(500).json({ type: err });
+    }
+});
+exports.updateUser = updateUser;
 //# sourceMappingURL=userController.js.map

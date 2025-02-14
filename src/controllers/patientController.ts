@@ -185,7 +185,6 @@ const updatePatient = async (req: Request, res: Response) => {
 		);
 
 		if (!patient) {
-			console.log('Not Found');
 			res.status(404).json({ message: PatientErrors.NO_PATIENT_FOUND });
 		}
 

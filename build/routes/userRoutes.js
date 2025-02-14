@@ -33,5 +33,8 @@ const router = express_1.default.Router();
 router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
 router.route('/profile').get(authMiddleware_1.protect, userController.getUserProfile);
+router.route('/getUsers').get(authMiddleware_1.protect, userController.getUsers);
+router.route('/getUser/:id').get(authMiddleware_1.protect, userController.getUserById);
+router.route('/updateUser/:id').put(authMiddleware_1.protect, userController.updateUser);
 exports.default = router;
 //# sourceMappingURL=userRoutes.js.map
