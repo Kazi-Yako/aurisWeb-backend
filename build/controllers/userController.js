@@ -19,7 +19,7 @@ const errors_1 = require("../errors");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const mongodb_1 = require("mongodb");
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { firstName, lastName, email, password, role } = req.body;
+    const { firstName, lastName, email, password, role, status } = req.body;
     try {
         // check if email exists in db
         const user = yield userModel_1.default.findOne({ email });
@@ -36,7 +36,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             lastName,
             email,
             password: hashedPassword,
-            activeStatus: true,
+            status,
             role,
         });
         yield newUser.save();

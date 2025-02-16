@@ -7,7 +7,7 @@ import { IUser } from '../types/custom';
 import { ObjectId } from 'mongodb';
 
 const registerUser = async (req: Request, res: Response) => {
-	const { firstName, lastName, email, password, role } = req.body;
+	const { firstName, lastName, email, password, role, status } = req.body;
 
 	try {
 		// check if email exists in db
@@ -28,7 +28,7 @@ const registerUser = async (req: Request, res: Response) => {
 			lastName,
 			email,
 			password: hashedPassword,
-			activeStatus: true,
+			status,
 			role,
 		});
 
