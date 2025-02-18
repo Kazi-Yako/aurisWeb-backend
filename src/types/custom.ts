@@ -15,6 +15,7 @@ export interface IUser extends Document {
 	role: string;
 	createdAt?: string;
 	updatedAt?: string;
+	picture?: string;
 }
 
 export interface ILogin {
