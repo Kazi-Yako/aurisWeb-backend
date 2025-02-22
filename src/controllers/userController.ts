@@ -55,6 +55,8 @@ const loginUser = async (req: Request, res: Response) => {
 				lastName: user.lastName,
 				email: user.email,
 				userToken: generateToken(user._id),
+				role: user.role,
+				status: user.status,
 			});
 		} else {
 			res.status(400).json({
@@ -134,6 +136,39 @@ const updateUser = async (req: Request, res: Response) => {
 		}
 
 		res.status(200).json(user);
+	} catch (err: any) {
+		// Check if the error is a duplicate key error
+		if (err.code === 11000) {
+			return res.status(409).json({ message: 'Duplicate user found' });
+		}
+		res.status(500).json({ type: err });
+	}
+};
+
+const updatePassword = async (req: Request, res: Response) => {
+	try {
+		const { password } = req.body;
+
+		const salt = await bcrypt.genSalt(10);
+
+		const hashedPassword = await bcrypt.hash(password, salt);
+
+		// Update only the password field
+		const user = await User.findOneAndUpdate(
+			{ _id: req.params.id },
+			{
+				$set: { password: hashedPassword },
+			},
+			{
+				returnDocument: 'after',
+			}
+		);
+
+		if (!user) {
+			res.status(404).json({ message: UserErrors.NO_USER_FOUND });
+		}
+
+		res.status(200).json(user);
 	} catch (err) {
 		res.status(500).json({ type: err });
 	}
@@ -146,4 +181,5 @@ export {
 	getUsers,
 	getUserById,
 	updateUser,
+	updatePassword,
 };

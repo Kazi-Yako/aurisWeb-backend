@@ -10,5 +10,6 @@ router.route('/profile').get(protect, userController.getUserProfile);
 router.route('/getUsers').get(protect, userController.getUsers);
 router.route('/getUser/:id').get(protect, userController.getUserById);
 router.route('/updateUser/:id').put(protect, userController.updateUser);
+router.route('/updatePassword/:id').put(protect, userController.updatePassword);
 
 export default router;
