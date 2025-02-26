@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { IUser } from '../types/custom';
 import { ObjectId } from 'mongodb';
+import { uploadImageToGCP } from './uploadController';
 
 const registerUser = async (req: Request, res: Response) => {
 	const { firstName, lastName, email, password, role, status } = req.body;
@@ -57,6 +58,7 @@ const loginUser = async (req: Request, res: Response) => {
 				userToken: generateToken(user._id),
 				role: user.role,
 				status: user.status,
+				picture: user.picture,
 			});
 		} else {
 			res.status(400).json({
@@ -79,6 +81,9 @@ const getUserProfile = async (req: Request, res: Response) => {
 				firstName: user.firstName,
 				lastName: user.lastName,
 				email: user.email,
+				role: user.role,
+				status: user.status,
+				picture: user.picture,
 			});
 		} else {
 			res.status(404).json({ type: UserErrors.NO_USER_FOUND });
@@ -121,6 +126,16 @@ const getUserById = async (req: Request, res: Response) => {
 
 const updateUser = async (req: Request, res: Response) => {
 	try {
+		// If a file was uploaded, assume req.file exists.
+		// For instance, you might have used multer in your route.
+		if (req.file) {
+			// Here, you would typically call your function that handles the file upload to GCP.
+			const imageUrl = await uploadImageToGCP(req.file);
+
+			// Merge the image URL into the update fields.
+			req.body.picture = imageUrl;
+		}
+
 		const user = await User.findOneAndUpdate(
 			{ _id: req.params.id },
 			{
@@ -132,7 +147,7 @@ const updateUser = async (req: Request, res: Response) => {
 		);
 
 		if (!user) {
-			res.status(404).json({ message: UserErrors.NO_USER_FOUND });
+			return res.status(404).json({ message: UserErrors.NO_USER_FOUND });
 		}
 
 		res.status(200).json(user);
