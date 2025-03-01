@@ -72,8 +72,12 @@ const add = async (req: Request, res: Response) => {
 		await newPhysician.save();
 
 		res.status(200).json({ message: 'Physician added successfully' });
-	} catch (err) {
-		res.status(500).json({ type: err });
+	} catch (err: any) {
+		res.status(500).json({
+			message:
+				err.message ||
+				'An unexpected error occurred. Failed to add a new Physician',
+		});
 	}
 };
 
