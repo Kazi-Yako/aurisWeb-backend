@@ -11,9 +11,12 @@ console.log('URI:', uri);
 const connectDB = async () => {
 	try {
 		mongoose.set('strictQuery', false);
-		await connect(uri);
+		connect(uri).then(() => {
+			console.log('MongoDB connected');
+		});
 	} catch (error) {
 		console.log(`Error: ${error}`);
+		console.error('MongoDB connection error:', error);
 		process.exit(1);
 	}
 };

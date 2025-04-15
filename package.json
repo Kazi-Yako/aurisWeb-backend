@@ -7,7 +7,7 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node-dev --files src/server.ts\"",
 		"start": "dotenv -e .env node ./build/server.js",
-		"build": "tsc -p . && cpx ./src/config/*.json ./build/config"
+		"build": "tsc -p . && cpx ./src/config/*.json ./build/config && cpx .env ./build"
 	},
 	"repository": {
 		"type": "git",

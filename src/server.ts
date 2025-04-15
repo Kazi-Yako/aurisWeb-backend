@@ -33,7 +33,12 @@ app.use('/api/physician', physicianRoutes);
 app.use('/api/appointment', appointmentRoutes);
 app.use('/api/medicalhistory', medicalHistoryRoutes);
 
-// deployment configuration
+// Middleware
+app.use(notFound);
+app.use(errorHandler);
+
+/**********************  Begin of section used for Development deployment *************************/
+
 if (process.env.NODE_ENV === 'production') {
 	app.use(express.static(path.join(__dirname, '/frontend/build')));
 
@@ -42,10 +47,6 @@ if (process.env.NODE_ENV === 'production') {
 	);
 }
 
-// Middleware
-app.use(notFound);
-app.use(errorHandler);
-
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
@@ -53,3 +54,27 @@ app.listen(PORT, () => {
 		`Server running in ${process.env.NODE_ENV} mode on port http://localhost:${PORT}`
 	);
 });
+
+/**********************  End of section used for Development deployment ******************************/
+
+/**********************  Begin of section used for deployment in Google Cloud Run ********************/
+
+// const PORT = parseInt(process.env.PORT || '8080', 10);
+// app.listen(PORT, '0.0.0.0', () => {
+// 	console.log(`Server running on port ${PORT}`);
+// });
+
+// app.get('/', (req, res) => {
+// 	res.send('Backend service is running.');
+// });
+
+// app.get('/test-db', async (req, res) => {
+// 	try {
+// 		connectDB();
+// 		res.send('Database connection OK');
+// 	} catch (error: any) {
+// 		res.status(500).send('Database connection FAILED: ' + error.message);
+// 	}
+// });
+
+/**********************  End of section used for deployment in Google Cloud Run ********************/
