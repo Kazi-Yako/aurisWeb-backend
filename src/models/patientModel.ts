@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import { IPatient } from '../types/custom';
 
 const patientSchema = new Schema<IPatient>(
@@ -73,10 +73,16 @@ const patientSchema = new Schema<IPatient>(
 		medicalHistory: {
 			type: String,
 		},
+		organizationId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'organizations',
+			required: true,
+			index: true,
+		},
 	},
 	{
 		timestamps: true,
-	}
+	},
 );
 
 patientSchema.index({ firstName: 1, lastName: 1, dob: 1 }, { unique: true });

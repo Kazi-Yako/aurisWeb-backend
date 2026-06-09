@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import { IAppointment } from '../types/custom';
 
 const appointmentSchema = new Schema<IAppointment>(
@@ -50,10 +50,16 @@ const appointmentSchema = new Schema<IAppointment>(
 			type: Boolean,
 			required: false,
 		},
+		organizationId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'organizations',
+			required: true,
+			index: true,
+		},
 	},
 	{
 		timestamps: true,
-	}
+	},
 );
 
 const appointmentModel = model<IAppointment>('appointments', appointmentSchema);

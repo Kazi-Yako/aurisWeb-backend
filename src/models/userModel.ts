@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import { IUser } from '../types/custom';
 
 const userSchema = new Schema<IUser>(
@@ -33,10 +33,18 @@ const userSchema = new Schema<IUser>(
 			type: String,
 			required: false,
 		},
+
+		// tenant reference
+		organizationId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'organizations',
+			required: true,
+			index: true,
+		},
 	},
 	{
 		timestamps: true,
-	}
+	},
 );
 
 userSchema.index({ email: 1 }, { unique: true });

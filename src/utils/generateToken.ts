@@ -4,9 +4,17 @@ import { Request, Response } from 'express';
 
 export const SECRET_KEY: Secret = process.env.JWT_SECRET as string;
 
-// generate token that expires in 12 hours
-const generateToken = (id: any) => {
-	return jwt.sign({ id }, SECRET_KEY, { expiresIn: '12h' });
+const generateToken = (userId: string, organizationId: string) => {
+	return jwt.sign(
+		{
+			_id: userId,
+			organizationId,
+		},
+		SECRET_KEY,
+		{
+			expiresIn: '12h',
+		},
+	);
 };
 
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
@@ -24,4 +32,5 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
 
 	return res.sendStatus(401);
 };
+
 export { generateToken, verifyToken };

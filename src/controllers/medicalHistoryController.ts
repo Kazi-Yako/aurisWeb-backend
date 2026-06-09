@@ -8,10 +8,13 @@ import {
 import Patient from '../models/patientModel';
 import Diagnosis from '../models/diagnosisModel';
 import { convertDate } from '../utils/common';
+import { ObjectId } from 'mongodb';
 
 const getMedicalRecords = async (req: Request, res: Response) => {
 	try {
-		const patients: IPatient[] = await Patient.find({});
+		const patients: IPatient[] = await Patient.find({
+			organizationId: new ObjectId(req.query.organizationId as string),
+		});
 
 		let newPatients: IPatient[] = [];
 
@@ -37,6 +40,7 @@ const getMedicalRecords = async (req: Request, res: Response) => {
 				allergies: patient.allergies,
 				medications: patient.medications,
 				medicalHistory: patient.medicalHistory,
+				organizationId: patient.organizationId,
 			};
 
 			if (patient.createdAt)
@@ -56,12 +60,13 @@ const getMedicalRecords = async (req: Request, res: Response) => {
 
 const getPatientMedicalRecords = async (req: Request, res: Response) => {
 	try {
-		const { firstName, lastName, dob } = req.query;
+		const { firstName, lastName, dob, organizationId } = req.query;
 
 		let searchOptions: IPatientSearch = {
 			firstName: '',
 			lastName: '',
 			dob: '',
+			organizationId: '',
 		};
 
 		if (firstName)
@@ -69,6 +74,8 @@ const getPatientMedicalRecords = async (req: Request, res: Response) => {
 		if (lastName)
 			searchOptions.lastName = lastName.toString().toLowerCase();
 		if (dob) searchOptions.dob = dob.toString();
+		if (organizationId)
+			searchOptions.organizationId = organizationId.toString();
 
 		const patients: IPatient[] = await Patient.find(searchOptions);
 

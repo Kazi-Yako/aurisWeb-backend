@@ -1,7 +1,7 @@
-import { TypeOfRdvErrors } from '../errors';
+import { appointmentTypeModelErrors } from '../errors';
 import { Request, Response } from 'express';
-import { ITypeOfAppointment } from '../types/custom';
-import TypeOfRdv from '../models/typeOfRdvModel';
+import { IAppointmentType } from '../types/custom';
+import appointmentType from '../models/appointmentTypeModel';
 import { ObjectId } from 'mongodb';
 
 const add = async (req: Request, res: Response) => {
@@ -13,25 +13,27 @@ const add = async (req: Request, res: Response) => {
 		let descriptionLower = new String(description).toLowerCase();
 
 		// check if the type of RDV exists in db
-		const typeOfRdv: ITypeOfAppointment | null = await TypeOfRdv.findOne({
-			name: nameLower,
-			shortName: shortNameLower,
-		});
+		const appointmentTypeModel: IAppointmentType | null =
+			await appointmentType.findOne({
+				name: nameLower,
+				shortName: shortNameLower,
+			});
 
-		if (typeOfRdv) {
-			return res
-				.status(400)
-				.json({ message: TypeOfRdvErrors.TYPE_OF_RDV_ALREADY_EXISTS });
+		if (appointmentTypeModel) {
+			return res.status(400).json({
+				message:
+					appointmentTypeModelErrors.APPOINTMENT_TYPE_ALREADY_EXISTS,
+			});
 		}
 
 		// create new type of RDV document in db
-		let newTypeOfRdv = new TypeOfRdv({
+		let newappointmentTypeModel = new appointmentType({
 			name: nameLower,
 			shortName: shortNameLower,
 			description: descriptionLower,
 		});
 
-		await newTypeOfRdv.save();
+		await newappointmentTypeModel.save();
 
 		res.status(200).json({
 			message: 'A new type of Appointment is added successfully',
@@ -43,9 +45,10 @@ const add = async (req: Request, res: Response) => {
 
 const getAppointmentTypes = async (req: Request, res: Response) => {
 	try {
-		const typeOfRdvs: ITypeOfAppointment[] = await TypeOfRdv.find({});
+		const appointmentTypeModels: IAppointmentType[] =
+			await appointmentType.find({});
 
-		res.status(200).json(typeOfRdvs);
+		res.status(200).json(appointmentTypeModels);
 	} catch (err) {
 		res.status(500).json({ type: err });
 	}
@@ -56,20 +59,23 @@ const getAppointmentType = async (req: Request, res: Response) => {
 		const { id } = req.params;
 
 		if (!id) {
-			return res
-				.status(400)
-				.json({ message: TypeOfRdvErrors.TYPE_OF_RDV_ID_IS_REQUIRED });
+			return res.status(400).json({
+				message:
+					appointmentTypeModelErrors.APPOINTMENT_TYPE_IS_REQUIRED,
+			});
 		}
 
-		const typeOfRdv = await TypeOfRdv.findOne({ _id: new ObjectId(id) });
+		const appointmentTypeModel = await appointmentType.findOne({
+			_id: new ObjectId(id),
+		});
 
-		if (!typeOfRdv) {
-			return res
-				.status(404)
-				.json({ message: TypeOfRdvErrors.NO_TYPE_OF_RDV_FOUND });
+		if (!appointmentTypeModel) {
+			return res.status(404).json({
+				message: appointmentTypeModelErrors.NO_APPOINTMENT_TYPE_FOUND,
+			});
 		}
 
-		res.status(200).json(typeOfRdv);
+		res.status(200).json(appointmentTypeModel);
 	} catch (err) {
 		res.status(500).json({ type: err });
 	}
@@ -77,24 +83,24 @@ const getAppointmentType = async (req: Request, res: Response) => {
 
 const updateAppointmentType = async (req: Request, res: Response) => {
 	try {
-		const typeOfRdv = await TypeOfRdv.findOneAndUpdate(
+		const appointmentTypeModel = await appointmentType.findOneAndUpdate(
 			{ _id: new ObjectId(req.params.id) },
 			{
 				$set: req.body,
 			},
 			{
 				returnDocument: 'after',
-			}
+			},
 		);
 
-		if (!typeOfRdv) {
+		if (!appointmentTypeModel) {
 			console.log('Not Found');
 			res.status(404).json({
-				message: TypeOfRdvErrors.NO_TYPE_OF_RDV_FOUND,
+				message: appointmentTypeModelErrors.NO_APPOINTMENT_TYPE_FOUND,
 			});
 		}
 
-		res.status(200).json(typeOfRdv);
+		res.status(200).json(appointmentTypeModel);
 	} catch (err) {
 		res.status(500).json({ type: err });
 	}
@@ -102,14 +108,14 @@ const updateAppointmentType = async (req: Request, res: Response) => {
 
 const deleteAppointmentType = async (req: Request, res: Response) => {
 	try {
-		const typeOfRdv = await TypeOfRdv.findOneAndDelete({
+		const appointmentTypeModel = await appointmentType.findOneAndDelete({
 			_id: new ObjectId(req.params.id),
 		});
 
-		if (!typeOfRdv) {
+		if (!appointmentTypeModel) {
 			console.log('Not Found');
 			res.status(404).json({
-				message: TypeOfRdvErrors.NO_TYPE_OF_RDV_FOUND,
+				message: appointmentTypeModelErrors.NO_APPOINTMENT_TYPE_FOUND,
 			});
 		}
 

@@ -20,6 +20,7 @@ const add = async (req: Request, res: Response) => {
 			allergies,
 			medicalHistory,
 			medications,
+			organizationId,
 		} = req.body;
 
 		let firstNameLower = new String(firstName).toLowerCase();
@@ -32,6 +33,7 @@ const add = async (req: Request, res: Response) => {
 			middleName: middleNameLower,
 			lastName: lastNameLower,
 			apptDate,
+			organizationId,
 		});
 
 		if (appointment) {
@@ -55,6 +57,7 @@ const add = async (req: Request, res: Response) => {
 			medicalHistory,
 			medications,
 			apptStatus: 'Open',
+			organizationId,
 		});
 
 		await newAppointment.save();
@@ -69,7 +72,9 @@ const add = async (req: Request, res: Response) => {
 
 const getAppointments = async (req: Request, res: Response) => {
 	try {
-		const appointments: IAppointment[] = await Appointment.find({});
+		const appointments: IAppointment[] = await Appointment.find({
+			organizationId: req.userAttributes?.organizationId,
+		});
 
 		res.status(200).json(appointments);
 	} catch (err) {
@@ -88,14 +93,17 @@ const getTodayAppointments = async (req: Request, res: Response) => {
 				$gte: beginOfDate,
 				$lt: endOfDate,
 			},
+			organizationId: req.userAttributes?.organizationId,
 		});
 
 		const numberOfAppointments = appointments.length;
 
-		const numberOfPatients = await Patient.countDocuments();
+		const numberOfPatients = await Patient.countDocuments({
+			organizationId: req.userAttributes?.organizationId,
+		});
 
 		const completedAppointments = appointments.filter(
-			(appointment) => appointment.apptStatus === 'Completed'
+			(appointment) => appointment.apptStatus === 'Completed',
 		);
 
 		const numberOfCompletedAppointments = completedAppointments.length;
@@ -132,6 +140,7 @@ const getAppointment = async (req: Request, res: Response) => {
 
 		const appointment = await Appointment.findOne({
 			_id: new ObjectId(id),
+			organizationId: req.userAttributes?.organizationId,
 		});
 
 		if (!appointment) {
@@ -149,17 +158,19 @@ const getAppointment = async (req: Request, res: Response) => {
 const updateAppointment = async (req: Request, res: Response) => {
 	try {
 		const appointment = await Appointment.findOneAndUpdate(
-			{ _id: new ObjectId(req.params.id) },
+			{
+				_id: new ObjectId(req.params.id),
+				organizationId: req.userAttributes?.organizationId,
+			},
 			{
 				$set: req.body,
 			},
 			{
 				returnDocument: 'after',
-			}
+			},
 		);
 
 		if (!appointment) {
-			console.log('Not Found');
 			res.status(404).json({
 				message: AppointmentErrors.APPOINTMENT_NOT_FOUND,
 			});
@@ -175,10 +186,10 @@ const deleteAppointment = async (req: Request, res: Response) => {
 	try {
 		const appointment = await Appointment.findOneAndDelete({
 			_id: new ObjectId(req.params.id),
+			organizationId: req.userAttributes?.organizationId,
 		});
 
 		if (!appointment) {
-			console.log('Not Found');
 			res.status(404).json({
 				message: AppointmentErrors.APPOINTMENT_NOT_FOUND,
 			});

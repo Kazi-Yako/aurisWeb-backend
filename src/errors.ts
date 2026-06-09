@@ -17,10 +17,10 @@ export enum DiagnosisErrors {
 	DIAGNOSIS_ID_IS_REQUIRED = 'Diagnosis ID is required',
 }
 
-export enum TypeOfRdvErrors {
-	NO_TYPE_OF_RDV_FOUND = 'Type of Appointment not found',
-	TYPE_OF_RDV_ALREADY_EXISTS = 'Type of Appointment already exists',
-	TYPE_OF_RDV_ID_IS_REQUIRED = 'Type of Appointment ID is required',
+export enum appointmentTypeModelErrors {
+	NO_APPOINTMENT_TYPE_FOUND = 'Type of Appointment not found',
+	APPOINTMENT_TYPE_ALREADY_EXISTS = 'Type of Appointment already exists',
+	APPOINTMENT_TYPE_IS_REQUIRED = 'Type of Appointment ID is required',
 }
 
 export enum PhysicianErrors {

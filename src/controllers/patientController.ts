@@ -26,6 +26,7 @@ const add = async (req: Request, res: Response) => {
 			allergies,
 			medications,
 			medicalHistory,
+			organizationId,
 		} = req.body;
 
 		let firstNameLower = firstName.toString().toLowerCase();
@@ -40,6 +41,7 @@ const add = async (req: Request, res: Response) => {
 			firstName: firstNameLower,
 			lastName: lastNameLower,
 			dob: formattedDob,
+			organizationId: new ObjectId(organizationId),
 		});
 
 		if (patient) {
@@ -69,6 +71,7 @@ const add = async (req: Request, res: Response) => {
 			allergies,
 			medications,
 			medicalHistory,
+			organizationId: new ObjectId(organizationId),
 		});
 
 		await newPatient.save();
@@ -81,19 +84,25 @@ const add = async (req: Request, res: Response) => {
 
 const searchPatients = async (req: Request, res: Response) => {
 	try {
-		const { firstName, lastName, dob } = req.query;
+		const { firstName, lastName, dob, organizationId } = req.query;
 
 		let searchOptions: IPatientSearch = {
 			firstName: '',
 			lastName: '',
 			dob: '',
+			organizationId: '',
 		};
 
 		if (firstName)
 			searchOptions.firstName = firstName.toString().toLowerCase();
+
 		if (lastName)
 			searchOptions.lastName = lastName.toString().toLowerCase();
+
 		if (dob) searchOptions.dob = dob.toString();
+
+		if (organizationId)
+			searchOptions.organizationId = organizationId.toString();
 
 		const patients: IPatient[] = await Patient.find(searchOptions);
 
@@ -105,7 +114,9 @@ const searchPatients = async (req: Request, res: Response) => {
 
 const getPatients = async (req: Request, res: Response) => {
 	try {
-		const patients: IPatient[] = await Patient.find({});
+		const patients: IPatient[] = await Patient.find({
+			organizationId: new ObjectId(req.query.organizationId as string),
+		});
 
 		let newPatients: IPatient[] = [];
 
@@ -131,6 +142,7 @@ const getPatients = async (req: Request, res: Response) => {
 				allergies: patient.allergies,
 				medications: patient.medications,
 				medicalHistory: patient.medicalHistory,
+				organizationId: patient.organizationId,
 			};
 
 			if (patient.createdAt)
@@ -158,7 +170,10 @@ const getPatient = async (req: Request, res: Response) => {
 				.json({ message: PatientErrors.PATIENT_ID_IS_REQUIRED });
 		}
 
-		const patient = await Patient.findOne({ _id: new ObjectId(id) });
+		const patient = await Patient.findOne({
+			_id: new ObjectId(id),
+			organizationId: new ObjectId(req.query.organizationId as string),
+		});
 
 		if (!patient) {
 			return res
@@ -175,13 +190,18 @@ const getPatient = async (req: Request, res: Response) => {
 const updatePatient = async (req: Request, res: Response) => {
 	try {
 		const patient = await Patient.findOneAndUpdate(
-			{ _id: new ObjectId(req.params.id) },
+			{
+				_id: new ObjectId(req.params.id),
+				organizationId: new ObjectId(
+					req.query.organizationId as string,
+				),
+			},
 			{
 				$set: req.body,
 			},
 			{
 				returnDocument: 'after',
-			}
+			},
 		);
 
 		if (!patient) {
@@ -198,6 +218,7 @@ const deletePatient = async (req: Request, res: Response) => {
 	try {
 		const patient = await Patient.findOneAndDelete({
 			_id: new ObjectId(req.params.id),
+			organizationId: new ObjectId(req.query.organizationId as string),
 		});
 
 		if (!patient) {

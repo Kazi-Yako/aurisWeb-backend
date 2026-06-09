@@ -16,6 +16,7 @@ const add = async (req: Request, res: Response) => {
 		diagnosis,
 		prescription,
 		doctor,
+		organizationId,
 	} = req.body;
 
 	try {
@@ -28,6 +29,7 @@ const add = async (req: Request, res: Response) => {
 			firstName: firstNameLower,
 			lastName: lastNameLower,
 			dob: formattedDob,
+			organizationId: new ObjectId(organizationId),
 		});
 
 		if (!patient || patient == null) {
@@ -47,6 +49,7 @@ const add = async (req: Request, res: Response) => {
 			diagnosis,
 			prescription,
 			doctor,
+			organizationId: new ObjectId(organizationId),
 		});
 
 		await newDiagnosis.save();
@@ -59,7 +62,9 @@ const add = async (req: Request, res: Response) => {
 
 const getDiagnoses = async (req: Request, res: Response) => {
 	try {
-		const diagnoses: IDiagnosis[] = await Diagnosis.find({});
+		const diagnoses: IDiagnosis[] = await Diagnosis.find({
+			organizationId: new ObjectId(req.query.organizationId as string),
+		});
 
 		res.status(200).json(diagnoses);
 	} catch (err) {
@@ -77,7 +82,10 @@ const getDiagnosis = async (req: Request, res: Response) => {
 				.json({ message: DiagnosisErrors.DIAGNOSIS_ID_IS_REQUIRED });
 		}
 
-		const diagnosis = await Diagnosis.findOne({ _id: new ObjectId(id) });
+		const diagnosis = await Diagnosis.findOne({
+			_id: new ObjectId(id),
+			organizationId: new ObjectId(req.query.organizationId as string),
+		});
 
 		if (!diagnosis) {
 			return res
@@ -95,6 +103,7 @@ const deleteDiagnosis = async (req: Request, res: Response) => {
 	try {
 		const diagnosis = await Diagnosis.findOneAndDelete({
 			_id: new ObjectId(req.params.id),
+			organizationId: new ObjectId(req.query.organizationId as string),
 		});
 
 		if (!diagnosis) {

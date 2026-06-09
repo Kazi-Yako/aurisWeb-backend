@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import { IDiagnosis } from '../types/custom';
 
 const diagnosisSchema = new Schema<IDiagnosis>(
@@ -35,10 +35,16 @@ const diagnosisSchema = new Schema<IDiagnosis>(
 		doctor: {
 			type: String,
 		},
+		organizationId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'organizations',
+			required: true,
+			index: true,
+		},
 	},
 	{
 		timestamps: true,
-	}
+	},
 );
 
 const DiagnosisModel = model<IDiagnosis>('diagnoses', diagnosisSchema);

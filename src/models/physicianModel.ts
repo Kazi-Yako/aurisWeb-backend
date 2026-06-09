@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import { IPhysician } from '../types/custom';
 
 const physicianSchema = new Schema<IPhysician>(
@@ -64,10 +64,16 @@ const physicianSchema = new Schema<IPhysician>(
 		workPhone: {
 			type: String,
 		},
+		organizationId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'organizations',
+			required: true,
+			index: true,
+		},
 	},
 	{
 		timestamps: true,
-	}
+	},
 );
 
 const PhysicianModel = model<IPhysician>('physicians', physicianSchema);
