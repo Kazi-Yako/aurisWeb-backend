@@ -83,7 +83,7 @@ const loginUser = async (req: Request, res: Response) => {
 				role: user.role,
 				status: user.status,
 				picture: user.picture,
-				organizationId: String(user.organizationId),
+				organizationId: user.organizationId?.toString,
 				organization,
 			});
 		} else {

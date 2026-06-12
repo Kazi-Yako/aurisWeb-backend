@@ -1,3 +1,5 @@
+import { Types } from 'mongoose';
+
 export const SUPPORTED_LANGUAGES = ['en', 'fr'];
 
 // this syntax is equals to "en" | "fr"
@@ -16,7 +18,7 @@ export interface IUser extends Document {
 	createdAt?: string;
 	updatedAt?: string;
 	picture?: string;
-	organizationId?: string;
+	organizationId?: Types.ObjectId;
 }
 
 export interface ILogin {
@@ -61,7 +63,7 @@ export interface IPatient {
 	allergies?: string;
 	medications?: string;
 	medicalHistory?: string;
-	organizationId?: string;
+	organizationId?: Types.ObjectId;
 }
 
 export interface IAppointment {
@@ -84,7 +86,7 @@ export interface IAppointment {
 	allergies?: string;
 	medications?: string;
 	medicalHistory?: string;
-	organizationId?: string;
+	organizationId?: Types.ObjectId;
 }
 
 export interface Istats {
@@ -108,7 +110,7 @@ export interface IDiagnosis {
 	createdAt?: string;
 	appointmentType?: string;
 	doctor?: string;
-	organizationId?: string;
+	organizationId?: Types.ObjectId;
 }
 
 export interface IAppointmentType {
@@ -117,6 +119,7 @@ export interface IAppointmentType {
 	shortName?: string;
 	description?: string;
 	submit?: string;
+	organizationId?: Types.ObjectId;
 }
 
 export interface IDashboardState {
@@ -143,7 +146,7 @@ export interface IPhysician {
 	personalPhone?: string;
 	workPhone?: string;
 	submit?: string;
-	organizationId?: string;
+	organizationId?: Types.ObjectId;
 }
 
 export interface IColumns {
@@ -159,7 +162,7 @@ export interface IPatientSearch {
 	firstName: string;
 	lastName: string;
 	dob: string;
-	organizationId: string;
+	organizationId: Types.ObjectId;
 }
 
 export interface IMedicalRecord {
@@ -174,6 +177,7 @@ export interface IOrganization {
 	brandColor: string;
 	theme: string;
 	createdAt?: string;
+	organizationId?: Types.ObjectId;
 }
 
 export interface ICountry {

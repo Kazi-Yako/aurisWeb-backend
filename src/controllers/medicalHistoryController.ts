@@ -8,12 +8,14 @@ import {
 import Patient from '../models/patientModel';
 import Diagnosis from '../models/diagnosisModel';
 import { convertDate } from '../utils/common';
-import { ObjectId } from 'mongodb';
+import { Types } from 'mongoose';
 
 const getMedicalRecords = async (req: Request, res: Response) => {
 	try {
 		const patients: IPatient[] = await Patient.find({
-			organizationId: new ObjectId(req.query.organizationId as string),
+			organizationId: new Types.ObjectId(
+				req.query.organizationId as string,
+			),
 		});
 
 		let newPatients: IPatient[] = [];
@@ -62,12 +64,8 @@ const getPatientMedicalRecords = async (req: Request, res: Response) => {
 	try {
 		const { firstName, lastName, dob, organizationId } = req.query;
 
-		let searchOptions: IPatientSearch = {
-			firstName: '',
-			lastName: '',
-			dob: '',
-			organizationId: '',
-		};
+		// build search options as a partial to avoid type mismatches
+		let searchOptions: Partial<IPatientSearch> = {};
 
 		if (firstName)
 			searchOptions.firstName = firstName.toString().toLowerCase();
@@ -75,7 +73,10 @@ const getPatientMedicalRecords = async (req: Request, res: Response) => {
 			searchOptions.lastName = lastName.toString().toLowerCase();
 		if (dob) searchOptions.dob = dob.toString();
 		if (organizationId)
-			searchOptions.organizationId = organizationId.toString();
+			// ensure organizationId is an ObjectId for queries
+			searchOptions.organizationId = new Types.ObjectId(
+				organizationId.toString(),
+			);
 
 		const patients: IPatient[] = await Patient.find(searchOptions);
 

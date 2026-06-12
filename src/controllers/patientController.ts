@@ -4,9 +4,18 @@ import { IPatient, IPatientSearch } from '../types/custom';
 import Patient from '../models/patientModel';
 import { ObjectId } from 'mongodb';
 import { convertDate } from '../utils/common';
+import { Types } from 'mongoose';
 
 const add = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		let {
 			firstName,
 			middleName,
@@ -26,7 +35,6 @@ const add = async (req: Request, res: Response) => {
 			allergies,
 			medications,
 			medicalHistory,
-			organizationId,
 		} = req.body;
 
 		let firstNameLower = firstName.toString().toLowerCase();
@@ -41,7 +49,7 @@ const add = async (req: Request, res: Response) => {
 			firstName: firstNameLower,
 			lastName: lastNameLower,
 			dob: formattedDob,
-			organizationId: new ObjectId(organizationId),
+			organizationId: orgId,
 		});
 
 		if (patient) {
@@ -71,7 +79,7 @@ const add = async (req: Request, res: Response) => {
 			allergies,
 			medications,
 			medicalHistory,
-			organizationId: new ObjectId(organizationId),
+			organizationId: orgId,
 		});
 
 		await newPatient.save();
@@ -84,14 +92,17 @@ const add = async (req: Request, res: Response) => {
 
 const searchPatients = async (req: Request, res: Response) => {
 	try {
-		const { firstName, lastName, dob, organizationId } = req.query;
+		const { firstName, lastName, dob } = req.query;
 
-		let searchOptions: IPatientSearch = {
-			firstName: '',
-			lastName: '',
-			dob: '',
-			organizationId: '',
-		};
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
+		let searchOptions: Partial<IPatientSearch> = {};
 
 		if (firstName)
 			searchOptions.firstName = firstName.toString().toLowerCase();
@@ -101,8 +112,7 @@ const searchPatients = async (req: Request, res: Response) => {
 
 		if (dob) searchOptions.dob = dob.toString();
 
-		if (organizationId)
-			searchOptions.organizationId = organizationId.toString();
+		searchOptions.organizationId = orgId;
 
 		const patients: IPatient[] = await Patient.find(searchOptions);
 
@@ -114,8 +124,16 @@ const searchPatients = async (req: Request, res: Response) => {
 
 const getPatients = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const patients: IPatient[] = await Patient.find({
-			organizationId: new ObjectId(req.query.organizationId as string),
+			organizationId: orgId,
 		});
 
 		let newPatients: IPatient[] = [];
@@ -162,6 +180,14 @@ const getPatients = async (req: Request, res: Response) => {
 
 const getPatient = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const { id } = req.params;
 
 		if (!id) {
@@ -172,7 +198,7 @@ const getPatient = async (req: Request, res: Response) => {
 
 		const patient = await Patient.findOne({
 			_id: new ObjectId(id),
-			organizationId: new ObjectId(req.query.organizationId as string),
+			organizationId: orgId,
 		});
 
 		if (!patient) {
@@ -189,12 +215,17 @@ const getPatient = async (req: Request, res: Response) => {
 
 const updatePatient = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
 		const patient = await Patient.findOneAndUpdate(
 			{
 				_id: new ObjectId(req.params.id),
-				organizationId: new ObjectId(
-					req.query.organizationId as string,
-				),
+				organizationId: orgId,
 			},
 			{
 				$set: req.body,
@@ -216,9 +247,17 @@ const updatePatient = async (req: Request, res: Response) => {
 
 const deletePatient = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const patient = await Patient.findOneAndDelete({
 			_id: new ObjectId(req.params.id),
-			organizationId: new ObjectId(req.query.organizationId as string),
+			organizationId: orgId,
 		});
 
 		if (!patient) {
