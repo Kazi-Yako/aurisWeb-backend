@@ -6,6 +6,14 @@ import { ObjectId } from 'mongodb';
 
 const add = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		let {
 			firstName,
 			middleName,
@@ -42,7 +50,7 @@ const add = async (req: Request, res: Response) => {
 			firstName: firstNameLower,
 			lastName: lastNameLower,
 			identificationNumber: identificationNumberLower,
-			organizationId: new ObjectId(organizationId),
+			organizationId: orgId,
 		});
 
 		if (physician) {
@@ -69,7 +77,7 @@ const add = async (req: Request, res: Response) => {
 			email,
 			personalPhone,
 			workPhone,
-			organizationId: new ObjectId(organizationId),
+			organizationId: orgId,
 		});
 
 		await newPhysician.save();
@@ -86,8 +94,16 @@ const add = async (req: Request, res: Response) => {
 
 const getPhysicians = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const physicians: IPhysician[] = await Physician.find({
-			organizationId: new ObjectId(req.query.organizationId as string),
+			organizationId: orgId,
 		});
 
 		res.status(200).json(physicians);
@@ -98,6 +114,14 @@ const getPhysicians = async (req: Request, res: Response) => {
 
 const getPhysician = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const { id } = req.params;
 
 		if (!id) {
@@ -108,7 +132,7 @@ const getPhysician = async (req: Request, res: Response) => {
 
 		const physician = await Physician.findOne({
 			_id: new ObjectId(id),
-			organizationId: new ObjectId(req.query.organizationId as string),
+			organizationId: orgId,
 		});
 
 		if (!physician) {
@@ -125,12 +149,18 @@ const getPhysician = async (req: Request, res: Response) => {
 
 const updatePhysician = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const physician = await Physician.findOneAndUpdate(
 			{
 				_id: new ObjectId(req.params.id),
-				organizationId: new ObjectId(
-					req.query.organizationId as string,
-				),
+				organizationId: orgId,
 			},
 			{
 				$set: req.body,
@@ -155,9 +185,17 @@ const updatePhysician = async (req: Request, res: Response) => {
 
 const deletePatient = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const physician = await Physician.findOneAndDelete({
 			_id: new ObjectId(req.params.id),
-			organizationId: new ObjectId(req.query.organizationId as string),
+			organizationId: orgId,
 		});
 
 		if (!physician) {

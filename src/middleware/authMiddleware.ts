@@ -5,13 +5,6 @@ import { Request, Response, NextFunction } from 'express';
 
 export const SECRET_KEY: Secret = process.env.JWT_SECRET as string;
 
-interface JwtTokenInterface {
-	id: string;
-	organizationId: string;
-	iat: number;
-	exp: number;
-}
-
 const protect = asyncHandler(
 	async (req: Request, res: Response, next: NextFunction) => {
 		let token: string | JwtPayload;

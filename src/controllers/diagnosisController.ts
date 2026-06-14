@@ -6,6 +6,12 @@ import Patient from '../models/patientModel';
 import { ObjectId } from 'mongodb';
 
 const add = async (req: Request, res: Response) => {
+	const orgId = req.userAttributes?.organizationId;
+
+	if (!orgId) {
+		return res.status(400).json({ message: 'Organization ID is required' });
+	}
+
 	const {
 		firstName,
 		lastName,
@@ -16,7 +22,6 @@ const add = async (req: Request, res: Response) => {
 		diagnosis,
 		prescription,
 		doctor,
-		organizationId,
 	} = req.body;
 
 	try {
@@ -29,7 +34,7 @@ const add = async (req: Request, res: Response) => {
 			firstName: firstNameLower,
 			lastName: lastNameLower,
 			dob: formattedDob,
-			organizationId: new ObjectId(organizationId),
+			organizationId: orgId,
 		});
 
 		if (!patient || patient == null) {
@@ -49,7 +54,7 @@ const add = async (req: Request, res: Response) => {
 			diagnosis,
 			prescription,
 			doctor,
-			organizationId: new ObjectId(organizationId),
+			organizationId: orgId,
 		});
 
 		await newDiagnosis.save();
@@ -62,8 +67,16 @@ const add = async (req: Request, res: Response) => {
 
 const getDiagnoses = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const diagnoses: IDiagnosis[] = await Diagnosis.find({
-			organizationId: new ObjectId(req.query.organizationId as string),
+			organizationId: orgId,
 		});
 
 		res.status(200).json(diagnoses);
@@ -74,6 +87,14 @@ const getDiagnoses = async (req: Request, res: Response) => {
 
 const getDiagnosis = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const { id } = req.params;
 
 		if (!id) {
@@ -84,7 +105,7 @@ const getDiagnosis = async (req: Request, res: Response) => {
 
 		const diagnosis = await Diagnosis.findOne({
 			_id: new ObjectId(id),
-			organizationId: new ObjectId(req.query.organizationId as string),
+			organizationId: orgId,
 		});
 
 		if (!diagnosis) {
@@ -101,9 +122,17 @@ const getDiagnosis = async (req: Request, res: Response) => {
 
 const deleteDiagnosis = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const diagnosis = await Diagnosis.findOneAndDelete({
 			_id: new ObjectId(req.params.id),
-			organizationId: new ObjectId(req.query.organizationId as string),
+			organizationId: orgId,
 		});
 
 		if (!diagnosis) {

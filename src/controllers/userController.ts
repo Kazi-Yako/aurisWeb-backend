@@ -9,6 +9,15 @@ import { uploadImageToGCP } from './uploadController';
 import OrganizationModel from '../models/organizationModel';
 
 const registerUser = async (req: Request, res: Response) => {
+	if (
+		req.userAttributes?.role !== 'admin' &&
+		req.userAttributes?.role !== 'manager'
+	) {
+		return res.status(403).json({
+			message: 'You are not authorized to create users',
+		});
+	}
+
 	const {
 		firstName,
 		lastName,

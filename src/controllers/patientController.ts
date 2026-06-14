@@ -4,7 +4,6 @@ import { IPatient, IPatientSearch } from '../types/custom';
 import Patient from '../models/patientModel';
 import { ObjectId } from 'mongodb';
 import { convertDate } from '../utils/common';
-import { Types } from 'mongoose';
 
 const add = async (req: Request, res: Response) => {
 	try {
