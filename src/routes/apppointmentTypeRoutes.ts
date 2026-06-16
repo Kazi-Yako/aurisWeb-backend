@@ -1,12 +1,18 @@
 import express from 'express';
 import { protect } from '../middleware/authMiddleware';
 import * as appointmentTypeController from '../controllers/appointmentTypeController';
+import { authorizeRoles } from '../middleware/authorizeRoles';
+import { ROLE_PERMISSIONS } from '../config/rolesConfig';
 
 const appointmentTypeRouter = express.Router();
 
 appointmentTypeRouter
 	.route('/add')
-	.post(protect, appointmentTypeController.add);
+	.post(
+		protect,
+		authorizeRoles(...ROLE_PERMISSIONS.APPOINTMENT_TYPES_CREATE),
+		appointmentTypeController.add,
+	);
 
 appointmentTypeRouter
 	.route('/get')
@@ -18,10 +24,18 @@ appointmentTypeRouter
 
 appointmentTypeRouter
 	.route('/update/:id')
-	.put(protect, appointmentTypeController.updateAppointmentType);
+	.put(
+		protect,
+		authorizeRoles(...ROLE_PERMISSIONS.APPOINTMENT_TYPES_CREATE),
+		appointmentTypeController.updateAppointmentType,
+	);
 
 appointmentTypeRouter
 	.route('/delete/:id')
-	.delete(protect, appointmentTypeController.deleteAppointmentType);
+	.delete(
+		protect,
+		authorizeRoles(...ROLE_PERMISSIONS.APPOINTMENT_TYPES_CREATE),
+		appointmentTypeController.deleteAppointmentType,
+	);
 
 export default appointmentTypeRouter;

@@ -7,6 +7,14 @@ import { ObjectId } from 'mongodb';
 
 const add = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		let {
 			firstName,
 			middleName,
@@ -20,7 +28,6 @@ const add = async (req: Request, res: Response) => {
 			allergies,
 			medicalHistory,
 			medications,
-			organizationId,
 		} = req.body;
 
 		let firstNameLower = new String(firstName).toLowerCase();
@@ -33,7 +40,7 @@ const add = async (req: Request, res: Response) => {
 			middleName: middleNameLower,
 			lastName: lastNameLower,
 			apptDate,
-			organizationId,
+			organizationId: orgId,
 		});
 
 		if (appointment) {
@@ -57,7 +64,7 @@ const add = async (req: Request, res: Response) => {
 			medicalHistory,
 			medications,
 			apptStatus: 'Open',
-			organizationId,
+			organizationId: orgId,
 		});
 
 		await newAppointment.save();
@@ -72,8 +79,16 @@ const add = async (req: Request, res: Response) => {
 
 const getAppointments = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const appointments: IAppointment[] = await Appointment.find({
-			organizationId: req.userAttributes?.organizationId,
+			organizationId: orgId,
 		});
 
 		res.status(200).json(appointments);
@@ -84,6 +99,14 @@ const getAppointments = async (req: Request, res: Response) => {
 
 const getTodayAppointments = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const beginOfDate = new Date().setHours(0, 0, 0, 0);
 
 		const endOfDate = new Date().setHours(23, 59, 59, 999);
@@ -93,13 +116,13 @@ const getTodayAppointments = async (req: Request, res: Response) => {
 				$gte: beginOfDate,
 				$lt: endOfDate,
 			},
-			organizationId: req.userAttributes?.organizationId,
+			organizationId: orgId,
 		});
 
 		const numberOfAppointments = appointments.length;
 
 		const numberOfPatients = await Patient.countDocuments({
-			organizationId: req.userAttributes?.organizationId,
+			organizationId: orgId,
 		});
 
 		const completedAppointments = appointments.filter(
@@ -130,6 +153,14 @@ const getTodayAppointments = async (req: Request, res: Response) => {
 
 const getAppointment = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const { id } = req.params;
 
 		if (!id) {
@@ -140,7 +171,7 @@ const getAppointment = async (req: Request, res: Response) => {
 
 		const appointment = await Appointment.findOne({
 			_id: new ObjectId(id),
-			organizationId: req.userAttributes?.organizationId,
+			organizationId: orgId,
 		});
 
 		if (!appointment) {
@@ -157,10 +188,18 @@ const getAppointment = async (req: Request, res: Response) => {
 
 const updateAppointment = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const appointment = await Appointment.findOneAndUpdate(
 			{
 				_id: new ObjectId(req.params.id),
-				organizationId: req.userAttributes?.organizationId,
+				organizationId: orgId,
 			},
 			{
 				$set: req.body,
@@ -184,9 +223,17 @@ const updateAppointment = async (req: Request, res: Response) => {
 
 const deleteAppointment = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const appointment = await Appointment.findOneAndDelete({
 			_id: new ObjectId(req.params.id),
-			organizationId: req.userAttributes?.organizationId,
+			organizationId: orgId,
 		});
 
 		if (!appointment) {
