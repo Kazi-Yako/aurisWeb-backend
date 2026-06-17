@@ -104,10 +104,10 @@ const searchPatients = async (req: Request, res: Response) => {
 		let searchOptions: Partial<IPatientSearch> = {};
 
 		if (firstName)
-			searchOptions.firstName = firstName.toString().toLowerCase();
+			searchOptions.firstName = firstName.toString().toLowerCase().trim();
 
 		if (lastName)
-			searchOptions.lastName = lastName.toString().toLowerCase();
+			searchOptions.lastName = lastName.toString().toLowerCase().trim();
 
 		if (dob) searchOptions.dob = dob.toString();
 

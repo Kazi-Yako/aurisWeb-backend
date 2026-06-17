@@ -9,6 +9,12 @@ import { uploadImageToGCP } from './uploadController';
 import OrganizationModel from '../models/organizationModel';
 
 const registerUser = async (req: Request, res: Response) => {
+	const orgId = req.userAttributes?.organizationId;
+
+	if (!orgId) {
+		return res.status(400).json({ message: 'Organization ID is required' });
+	}
+
 	if (
 		req.userAttributes?.role !== 'admin' &&
 		req.userAttributes?.role !== 'manager'
@@ -18,15 +24,7 @@ const registerUser = async (req: Request, res: Response) => {
 		});
 	}
 
-	const {
-		firstName,
-		lastName,
-		email,
-		password,
-		role,
-		status,
-		organizationId,
-	} = req.body;
+	const { firstName, lastName, email, password, role, status } = req.body;
 
 	try {
 		// check if email exists in db
@@ -36,12 +34,6 @@ const registerUser = async (req: Request, res: Response) => {
 			return res
 				.status(400)
 				.json({ type: UserErrors.USERNAME_ALREADY_EXISTS });
-		}
-
-		if (!organizationId) {
-			return res
-				.status(400)
-				.json({ message: 'organizationId is required' });
 		}
 
 		const salt = await bcrypt.genSalt(10);
@@ -56,7 +48,7 @@ const registerUser = async (req: Request, res: Response) => {
 			password: hashedPassword,
 			status,
 			role,
-			organizationId: new ObjectId(organizationId),
+			organizationId: orgId,
 		});
 
 		await newUser.save();
@@ -71,11 +63,14 @@ const loginUser = async (req: Request, res: Response) => {
 	const { email, password } = req.body;
 
 	try {
+		const userEmail = email.toString().toLowerCase().trim();
+
+		const userPassword = password.toString().trim();
 		// check if user email exists in db
-		const user: IUser | null = await User.findOne({ email });
+		const user: IUser | null = await User.findOne({ email: userEmail });
 
 		// return user obj if their password matches
-		if (user && (await user.matchPassword(password))) {
+		if (user && (await user.matchPassword(userPassword))) {
 			const organization = await OrganizationModel.findById(
 				user.organizationId,
 			);
@@ -98,10 +93,13 @@ const loginUser = async (req: Request, res: Response) => {
 		} else {
 			res.status(400).json({
 				type: UserErrors.INVALID_EMAIL_OR_PASSWORD,
+				message: 'Invalid email or password',
 			});
 		}
 	} catch (err) {
-		res.status(500).json({ type: err });
+		res.status(500).json({
+			message: 'Server error. Please try again later',
+		});
 	}
 };
 
