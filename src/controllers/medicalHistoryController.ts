@@ -12,10 +12,16 @@ import { Types } from 'mongoose';
 
 const getMedicalRecords = async (req: Request, res: Response) => {
 	try {
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
 		const patients: IPatient[] = await Patient.find({
-			organizationId: new Types.ObjectId(
-				req.query.organizationId as string,
-			),
+			organizationId: orgId,
 		});
 
 		let newPatients: IPatient[] = [];
@@ -62,7 +68,15 @@ const getMedicalRecords = async (req: Request, res: Response) => {
 
 const getPatientMedicalRecords = async (req: Request, res: Response) => {
 	try {
-		const { firstName, lastName, dob, organizationId } = req.query;
+		const orgId = req.userAttributes?.organizationId;
+
+		if (!orgId) {
+			return res
+				.status(400)
+				.json({ message: 'Organization ID is required' });
+		}
+
+		const { firstName, lastName, dob } = req.query;
 
 		// build search options as a partial to avoid type mismatches
 		let searchOptions: Partial<IPatientSearch> = {};
@@ -71,12 +85,10 @@ const getPatientMedicalRecords = async (req: Request, res: Response) => {
 			searchOptions.firstName = firstName.toString().toLowerCase();
 		if (lastName)
 			searchOptions.lastName = lastName.toString().toLowerCase();
+
 		if (dob) searchOptions.dob = dob.toString();
-		if (organizationId)
-			// ensure organizationId is an ObjectId for queries
-			searchOptions.organizationId = new Types.ObjectId(
-				organizationId.toString(),
-			);
+
+		searchOptions.organizationId = orgId;
 
 		const patients: IPatient[] = await Patient.find(searchOptions);
 
