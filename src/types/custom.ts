@@ -170,17 +170,17 @@ export interface IMedicalRecord {
 	diagnoses: IDiagnosis[];
 }
 
+export interface ICountry {
+	_id?: string;
+	name: string;
+}
+
 export interface IOrganization {
 	_id?: string;
 	name?: string;
+	logoUrl?: string;
 	countries: ICountry[];
 	brandColor: string;
 	theme: string;
 	createdAt?: string;
-	organizationId?: Types.ObjectId;
-}
-
-export interface ICountry {
-	_id?: string;
-	name: string;
 }
