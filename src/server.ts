@@ -11,6 +11,9 @@ import apppointmentTypeRoutes from './routes/apppointmentTypeRoutes';
 import physicianRoutes from './routes/physicianRoutes';
 import appointmentRoutes from './routes/appointmentRoutes';
 import medicalHistoryRoutes from './routes/medicalHistoryRoutes';
+import countryRoutes from './routes/countryRoutes';
+import cityRoutes from './routes/cityRoutes';
+import stateRoutes from './routes/stateRoutes';
 
 dotenv.config();
 
@@ -32,6 +35,9 @@ app.use('/api/appointmentType', apppointmentTypeRoutes);
 app.use('/api/physician', physicianRoutes);
 app.use('/api/appointment', appointmentRoutes);
 app.use('/api/medicalhistory', medicalHistoryRoutes);
+app.use('/api/country', countryRoutes);
+app.use('/api/state', stateRoutes);
+app.use('/api/city', cityRoutes);
 
 // Middleware
 app.use(notFound);
@@ -43,7 +49,9 @@ if (process.env.NODE_ENV === 'production') {
 	app.use(express.static(path.join(__dirname, '/frontend/build')));
 
 	app.get('*', (req, res) =>
-		res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+		res.sendFile(
+			path.resolve(__dirname, 'frontend', 'build', 'index.html'),
+		),
 	);
 }
 
@@ -51,7 +59,7 @@ const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
 	console.log(
-		`Server running in ${process.env.NODE_ENV} mode on port http://localhost:${PORT}`
+		`Server running in ${process.env.NODE_ENV} mode on port http://localhost:${PORT}`,
 	);
 });
 

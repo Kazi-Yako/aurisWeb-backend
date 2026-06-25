@@ -31,7 +31,6 @@ const add = async (req: Request, res: Response) => {
 			email,
 			personalPhone,
 			workPhone,
-			organizationId,
 		} = req.body;
 
 		let firstNameLower = new String(firstName).toLowerCase();

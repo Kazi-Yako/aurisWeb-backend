@@ -35,3 +35,23 @@ export enum AppointmentErrors {
 	PATIENT_ID_IS_REQUIRED = 'Patient ID is required to set up an Appointment',
 	APPOINTMENT_DATE_IS_NOT_PROVIDED = 'Appointment date is not provided',
 }
+
+export enum CountryErrors {
+	NO_COUNTRY_FOUND = 'Country is not found',
+	COUNTRY_ID_IS_REQUIRED = 'Country ID is required1',
+	COUNTRY_CODE_IS_REQUIRED = 'Country Code is required1',
+	COUNTRY_ALREADY_EXISTS = 'Country already exists',
+}
+
+export enum StateErrors {
+	NO_STATE_FOUND = 'State is not found',
+	STATE_ID_IS_REQUIRED = 'State ID is required',
+	STATE_ALREADY_EXISTS = 'State already exists',
+	STATE_SHORTNAME_REQUIRED = 'State short name is required',
+}
+
+export enum CityErrors {
+	NO_CITY_FOUND = 'City is not found',
+	CITY_ID_IS_REQUIRED = 'City ID is required1',
+	CITY_ALREADY_EXISTS = 'City already exists',
+}

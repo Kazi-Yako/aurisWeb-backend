@@ -48,10 +48,10 @@ export interface IPatient {
 	dob: string;
 	address1?: string;
 	address2?: string;
+	country?: string;
 	city?: string;
 	state?: string;
 	zipCode?: string;
-	country?: string;
 	email?: string;
 	personalPhone?: string;
 	workPhone?: string;
@@ -138,10 +138,10 @@ export interface IPhysician {
 	identificationNumber: string;
 	address1?: string;
 	address2?: string;
+	country?: string;
 	city?: string;
 	state?: string;
 	zipCode?: string;
-	country?: string;
 	email?: string;
 	personalPhone?: string;
 	workPhone?: string;
@@ -170,11 +170,6 @@ export interface IMedicalRecord {
 	diagnoses: IDiagnosis[];
 }
 
-export interface ICountry {
-	_id?: string;
-	name: string;
-}
-
 export interface IOrganization {
 	_id?: string;
 	name?: string;
@@ -183,4 +178,24 @@ export interface IOrganization {
 	brandColor: string;
 	theme: string;
 	createdAt?: string;
+}
+
+export interface ICountry {
+	_id?: string;
+	name: string;
+	code: string;
+}
+
+export interface IState {
+	_id?: string;
+	name: string;
+	shortName: string;
+	countryId: Types.ObjectId;
+}
+
+export interface ICity {
+	_id?: string;
+	name: string;
+	countryId: Types.ObjectId;
+	stateId: Types.ObjectId;
 }
