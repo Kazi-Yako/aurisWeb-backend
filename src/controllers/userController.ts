@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { IUser } from '../types/custom';
 import { ObjectId } from 'mongodb';
-import { uploadImageToGCP } from './uploadController';
+import { uploadImage } from './uploadController';
 import OrganizationModel from '../models/organizationModel';
 
 const registerUser = async (req: Request, res: Response) => {
@@ -171,7 +171,7 @@ const updateUser = async (req: Request, res: Response) => {
 		// For instance, you might have used multer in your route.
 		if (req.file) {
 			// Here, you would typically call your function that handles the file upload to GCP.
-			const imageUrl = await uploadImageToGCP(req.file);
+			const imageUrl = await uploadImage(req.file);
 
 			// Merge the image URL into the update fields.
 			req.body.picture = imageUrl;

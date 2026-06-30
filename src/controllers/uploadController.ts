@@ -1,73 +1,89 @@
-import { Storage } from '@google-cloud/storage';
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import dotenv from 'dotenv';
 
 dotenv.config();
-// Initialize Google Cloud Storage
-const storage = new Storage({
-	keyFilename: path.join(
-		__dirname,
-		'../config/auris-gcp-service-account.json'
-	),
-	projectId: process.env.GCP_PROJECT_ID,
-});
 
-const bucketName = process.env.GCP_BUCKET_NAME;
+const STORAGE = process.env.STORAGE || 'gcp';
 
-console.log('Bucket Name:', bucketName);
+// ===============================
+// LOCAL STORAGE (EC2)
+// ===============================
+const uploadDir = '/home/ubuntu/uploads/avatars';
 
-if (!bucketName) {
-	throw new Error('GCP_BUCKET_NAME is not defined in environment variables');
+if (STORAGE === 'local') {
+	if (!fs.existsSync(uploadDir)) {
+		fs.mkdirSync(uploadDir, { recursive: true });
+	}
 }
 
-const bucket = storage.bucket(bucketName);
-
-// Multer storage configuration
 const upload = multer({
-	storage: multer.memoryStorage(), // Store in memory before uploading
-	limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+	storage: multer.memoryStorage(),
+	limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-// Upload file to GCP
-const uploadImageToGCP = async (file: Express.Multer.File): Promise<string> => {
+// ===============================
+// Upload handler
+// ===============================
+const uploadImage = async (file: Express.Multer.File): Promise<string> => {
+	if (!file) {
+		throw new Error('No file uploaded');
+	}
+
+	const timestamp = Date.now();
+	const fileName = `${timestamp}-${file.originalname}`;
+
+	// LOCAL STORAGE
+	if (STORAGE === 'local') {
+		const filePath = path.join(uploadDir, fileName);
+
+		// Ensure buffer is a Uint8Array for TypeScript compatibility
+		await fs.promises.writeFile(filePath, new Uint8Array(file.buffer));
+
+		// return relative path (important)
+		return `/uploads/avatars/${fileName}`;
+	}
+
+	// ===============================
+	// GCP (legacy support)
+	// ===============================
+	const { Storage } = await import('@google-cloud/storage');
+
+	const storage = new Storage({
+		keyFilename: path.join(
+			__dirname,
+			'../config/auris-gcp-service-account.json',
+		),
+		projectId: process.env.GCP_PROJECT_ID,
+	});
+
+	const bucketName = process.env.GCP_BUCKET_NAME;
+
+	if (!bucketName) {
+		throw new Error('GCP_BUCKET_NAME missing');
+	}
+
+	const bucket = storage.bucket(bucketName);
+
 	return new Promise((resolve, reject) => {
-		try {
-			if (!file) {
-				console.error('Upload Error: No file provided');
-				return reject(new Error('No file uploaded'));
-			}
+		const fileNameGCP = `avatars/${timestamp}-${file.originalname}`;
+		const blob = bucket.file(fileNameGCP);
 
-			const { originalname, mimetype, buffer } = file;
-			const timestamp = Date.now();
-			const fileName = `avatars/${timestamp}-${originalname}`;
-			const blob = bucket.file(fileName);
+		const stream = blob.createWriteStream({
+			resumable: false,
+			metadata: { contentType: file.mimetype },
+		});
 
-			console.log(`Uploading file: ${fileName}`);
+		stream.on('error', reject);
 
-			const blobStream = blob.createWriteStream({
-				resumable: false,
-				metadata: { contentType: mimetype },
-			});
+		stream.on('finish', () => {
+			const url = `https://storage.googleapis.com/${bucketName}/${blob.name}`;
+			resolve(url);
+		});
 
-			blobStream.on('error', (error) => {
-				console.error('GCP Upload Error:', error);
-				reject(new Error(`Failed to upload to GCP: ${error.message}`));
-			});
-
-			blobStream.on('finish', () => {
-				const publicUrl = `https://storage.googleapis.com/${bucketName}/${blob.name}`;
-				console.log(`File uploaded successfully: ${publicUrl}`);
-				resolve(publicUrl);
-			});
-
-			blobStream.end(buffer);
-		} catch (error: any) {
-			console.error('Unexpected Error in uploadImageToGCP:', error);
-			reject(new Error(`Unexpected error: ${error.message}`));
-		}
+		stream.end(file.buffer);
 	});
 };
 
-// Express route
-export { upload, uploadImageToGCP };
+export { upload, uploadImage };
